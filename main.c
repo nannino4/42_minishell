@@ -33,9 +33,86 @@ char	*ft_get_command(char **line)
 		j++;
 	}
 	tmp = ft_substr(*line, i, ft_strlen(*line));
+	if (!tmp)
+		ft_error(); 							//TODO error management
 	free(*line);
 	*line = tmp;
 	return (command);
+}
+
+void	ft_check_for_single_quotes(char **line, int i)
+{
+	int j;
+
+	j = i;
+	while (*line[++i])
+	{
+		if (*line[i] == '\'')
+		{
+			while (j < i - 1)
+			{
+				*line[j] = *line[j + 1];
+				j++;
+			}
+			while (j < strlen(*line) - 2)
+			{
+				*line[j] = *line[j + 2];
+				j++;
+			}
+			*line[j] = 0;
+			return (i - 2);
+		}
+	}
+	return (j);
+}
+
+void	ft_check_for_double_quotes(char **line, int i)
+{
+	int j;
+
+	j = i;
+	while (*line[++i])
+	{
+		if (*line[i] == '$')
+			ft_check_for_variables(line, i);
+		if (*line[i] == '\"')
+		{
+			while (j < i - 1)
+			{
+				*line[j] = *line[j + 1];
+				j++;
+			}
+			while (j < strlen(*line) - 2)
+			{
+				*line[j] = *line[j + 2];
+				j++;
+			}
+			*line[j] = 0;
+			return (i - 2);
+		}
+	}
+	return (j);
+}
+
+void	ft_parse(char **line)
+{
+	int i;
+
+	i = 0;
+	while (*line[i])
+	{
+		if (*line[i] == '\'')
+			ft_check_for_single_quotes(line, i);
+		else if (*line[i] == '\"')
+			ft_check_for_double_quotes(line, i);
+		else if (*line[i] == '<' || *line[i] == '>' || *line[i] == '<<' || *line[i] == '>>')
+			ft_check_for_redirections(line, i);
+		else if (*line[i] == '$')
+			ft_check_for_variables(line, i);
+		else if (*line[i] == '|')
+			ft_check_for_pipes(line, i);
+		i++;
+	}
 }
 
 static void	ft_parse_and_execute(char *line)
@@ -46,7 +123,7 @@ static void	ft_parse_and_execute(char *line)
 	{
 		command = ft_get_command(&line);
 		ft_check_command(command); 				//TODO vedo se esiste il comando
-		ft_parse_redirections(&line);			//TODO parsing di <, >, >>, <<
+		ft_parse(&line);			//TODO parsing di <, >, >>, <<
 	}
 }
 
