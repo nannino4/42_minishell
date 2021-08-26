@@ -9,10 +9,23 @@
 # include <readline/history.h>
 # include "libft.h"
 
-/* command.c */
+/* commands */
 
-int	ft_check_echo(char **stringa);
+void	ft_check_echo(char **stringa);
+
+/* utils */
+
+int	ft_istoken(char c);
+void	ft_cut_line_io_redir(char **line, int i, int j);
+
+/* parsing */
+
+void	ft_parse(char **line);
+
 int	ft_check_for_single_quotes(char **line, int i);
 int	ft_check_for_double_quotes(char **line, int i);
+
+void    ft_check_for_redir(char **line, int i);
+void	ft_input_redir(char **line, int i);
 
 #endif
