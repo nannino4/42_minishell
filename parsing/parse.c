@@ -31,8 +31,15 @@ char	*ft_get_command(char **line)
 	command = 0;
 	i = 0;
 	skip_spaces(line); 							//TODO salta gli spazi
-	while (*line[i] && *line[i] != ' ')
-		i++;
+	if (*line[i] == '\'' || *line[i] == '\"')
+	{
+		//TODO gestisci questo caso
+	}
+	else
+	{
+		while (*line[i] && *line[i] != ' ')
+			i++;
+	}
 	j = 0;
 	command = malloc(sizeof(char) * (i + 1));
 	command[i] = 0;
@@ -57,7 +64,7 @@ static void	ft_parse_and_execute(char *line)
 
 	if (line && *line)
 	{
-		command = ft_get_command(&line);
+		command = ft_get_command(&line);		//TODO aggiungi utilizzo di "quotes"
 		ft_check_command(command); 				//TODO vedo se esiste il comando
 		ft_parse(&line);						//TODO parsing di <, >, >>, <<
 	}

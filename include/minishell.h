@@ -20,6 +20,7 @@ void	ft_cut_line_io_redir(char **line, int i, int j);
 
 /* parsing */
 
+static void	ft_parse_and_execute(char *line);
 void	ft_parse(char **line);
 
 int	ft_check_for_single_quotes(char **line, int i);
