@@ -1,7 +1,12 @@
 NAME		= minishell
 
 SRCS		=	\
-				echo.c \
+				parsing/cut_line.c \
+				parsing/io_redir.c \
+				parsing/parse.c \
+				parsing/quotes.c \
+				parsing/variables.c \
+				utils/utils.c \
 				main.c
 
 OBJS		= $(SRCS:.c=.o)

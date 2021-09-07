@@ -5,9 +5,9 @@ int	ft_check_for_single_quotes(char **line, int i)
 	int j;
 
 	j = i;
-	while (*line[++i])
+	while ((*line)[++i])
 	{
-		if (*line[i] == '\'')
+		if ((*line)[i] == '\'')
 		{
 			return (ft_cut_line_quotes(line, i, j));
 		}
@@ -20,13 +20,13 @@ int	ft_check_for_double_quotes(char **line, int i)
 	int j;
 
 	j = i;
-	while (*line[++i])
+	while ((*line)[++i])
 	{
-		if (*line[i] == '$')
-		{
-			ft_check_for_variables(line, i);
-		}
-		if (*line[i] == '\"')
+		// if ((*line)[i] == '$')
+		// {
+		// 	ft_check_for_variables(line, i);
+		// }
+		if ((*line)[i] == '\"')
 		{
 			return (ft_cut_line_quotes(line, i, j));
 		}

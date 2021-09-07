@@ -15,17 +15,28 @@
 int main(void)
 {
     char *line;
+    int pid;
+    int wstatus;
 
     line = readline("# Orders, my Lord? ");
     if (line && ft_strlen(line) > 0)
         add_history(line);
     while (line)
     {
-        ft_parse_and_execute(line);
-        // execute(line);
-        line = readline("# Orders, my Lord? ");
-        if (line && ft_strlen(line) > 0)
-            add_history(line);
+        pid = fork();
+        if (pid == 0)
+        {
+            ft_parse_and_execute(line);
+            exit(0);
+        }
+        else
+        {
+            wait(&wstatus);
+            printf("status:%d\n", wstatus);
+            line = readline("# Orders, my Lord? ");
+            if (line && ft_strlen(line) > 0)
+                add_history(line);
+        }
     }
     printf("exit\n");
 }

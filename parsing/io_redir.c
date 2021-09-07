@@ -5,15 +5,16 @@ void	ft_input_redir(char **line, int i)
 	int file;
 	int j;
 	int diff;
+	char *name;
 
 	j = i;
 	i++;
-	i = skip_spaces(line, i);
-	if (ft_istoken(*line[i]))
+	name = ft_get_name(*line, &i);
+	if (!name || !*name)
 	{
-		//TODO error: parsing
+		//TODO error management: nome file invalido
 	}
-	file = open(ft_get_name(line, &i), O_RDONLY);
+	file = open(name, O_RDONLY);
 	if (file == -1)
 	{
 		//TODO error: file openining
@@ -30,17 +31,17 @@ void	ft_input_redir(char **line, int i)
 void	ft_output_redir(char **line, int i)
 {
 	int file;
+	char *name;
 	int j;
-	int diff;
 
 	j = i;
 	i++;
-	i = skip_spaces(line, i);
-	if (ft_istoken(*line[i]))
+	name = ft_get_name(*line, &i);
+	if (!name || !*name)
 	{
-		//TODO error: parsing
+		//TODO error management: nome file invalido
 	}
-	file = open(ft_get_name(line, &i), O_WRONLY | O_CREAT, 0777);
+	file = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (file == -1)
 	{
 		//TODO error: file openining
@@ -50,7 +51,6 @@ void	ft_output_redir(char **line, int i)
 		//TODO error: dup2 failed
 	}
 	close(file);
-	diff = i - j;
 	ft_cut_line_io_redir(line, i, j);
 }
 
@@ -59,18 +59,19 @@ void	ft_double_output_redir(char **line, int i)
 	int file;
 	int j;
 	int diff;
+	char *name;
 
 	j = i;
 	i += 2;
-	i = skip_spaces(line, i);
-	if (ft_istoken(*line[i]))
+	name = ft_get_name(*line, &i);
+	if (!name || !*name)
 	{
-		//TODO error: parsing
+		//TODO error management: nome file invalido
 	}
-	file = open(ft_get_name(line, &i), O_WRONLY | O_CREAT | O_APPEND, 0777);
+	file = open(name, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (file == -1)
 	{
-		//TODO error: file openining
+		//TODO error: file can't be opened
 	}
 	if (dup2(file, STDOUT_FILENO) == -1)
 	{
@@ -81,19 +82,20 @@ void	ft_double_output_redir(char **line, int i)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-void	ft_double_input_redir(char **line, int i)
-{
-	//TODO
-}
+// void	ft_double_input_redir(char **line, int i)
+// {
+// 	//TODO
+// }
 
-void    ft_check_for_redir(char **line, int i)
+int    ft_check_for_redir(char **line, int i)
 {
-    if (*line[i] == '>' && *line[i + 1] == '>')
+    if ((*line)[i] == '>' && *line[i + 1] == '>')
 		ft_double_output_redir(line, i);
-    else if (*line[i] == '<' && *line[i + 1] == '<')
-		ft_double_input_redir(line, i);
-    else if (*line[i] == '<')
+    // else if ((*line)[i] == '<' && *line[i + 1] == '<')
+	// 	ft_double_input_redir(line, i);
+    else if ((*line)[i] == '<')
 		ft_input_redir(line, i);
-    else if (*line[i] == '>')
+    else if ((*line)[i] == '>')
 		ft_output_redir(line, i);
+	return (i); //TODO controlla output i
 }
