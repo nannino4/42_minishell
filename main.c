@@ -1,41 +1,31 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jfabi <jfabi@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/16 13:19:14 by jfabi             #+#    #+#             */
-/*   Updated: 2021/06/17 15:04:51 by jfabi            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
-    char *line;
     int pid;
-    int wstatus;
+    t_data data;
 
-    line = readline("# Orders, my Lord? ");
-    if (line && ft_strlen(line) > 0)
-        add_history(line);
-    while (line)
+    argc = 0;
+    argv = 0;
+    data.env = ft_env_creation(envp);
+    data.line = readline("# Orders, my Lord? ");
+    if (data.line && ft_strlen(data.line) > 0)
+        add_history(data.line);
+    while (data.line)
     {
         pid = fork();
         if (pid == 0)
         {
-            ft_parse_and_execute(line);
+            ft_parse_and_execute(&data);
             exit(0);
         }
         else
         {
-            wait(&wstatus);
-            printf("status:%d\n", wstatus);
-            line = readline("# Orders, my Lord? ");
-            if (line && ft_strlen(line) > 0)
-                add_history(line);
+            wait(0);
+            // TODO controlla se va fatto free(line)
+            data.line = readline("# Orders, my Lord? ");
+            if (data.line && ft_strlen(data.line) > 0)
+                add_history(data.line);
         }
     }
     printf("exit\n");

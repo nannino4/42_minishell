@@ -7,6 +7,7 @@ SRCS		=	\
 				parsing/quotes.c \
 				parsing/variables.c \
 				utils/utils.c \
+				utils/utils2.c \
 				main.c
 
 OBJS		= $(SRCS:.c=.o)

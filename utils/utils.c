@@ -12,27 +12,71 @@ char	*ft_get_name(char *line, int *i)
 	start = *i;
 	while (line[*i] && !ft_istoken(line[*i]) && line[*i] != ' ')
 	{
-		if (line[start] == '\'')
+		if (line[*i] == '\'')
 			*i = ft_check_for_single_quotes(&line, start);
-		else if (line[start] == '\"')
+		else if (line[*i] == '\"')
 			*i = ft_check_for_double_quotes(&line, start);
+		//  
+		// 	*i = ft_check_for_variables(&line, start);
 		(*i)++;
 	}
 	return (ft_substr(line, start, *i - start));
 }
 
-int	ft_skip_spaces(char *line, int i)
+int	ft_arrlen(char **arr)
 {
-	while (line[i] && line[i] == ' ')
+	int i;
+
+	i = 0;
+	while (arr[i])
+	{
 		i++;
+	}
 	return (i);
 }
 
-int	ft_istoken(char c)
+char **ft_env_creation(char **envp)
 {
-	if (c == '~' || c == '#' || c == '%' || c == '&' || c == '*' || c == '{' || c == '}' || c == '\\' || c == ':' || c == '<' || c == '>' || c == '?' || c == '/' || c == '|')
+	char **env;
+	int strings;
+	int i;
+
+	strings = ft_arrlen(envp);
+	env = malloc((strings + 1) * sizeof(void *));
+	if (!env)
 	{
-		return (1);
+		// TODO error management: allocation failed
 	}
-	return (0);
+	env[strings] = 0;
+	i = 0;
+	while (i < strings)
+	{
+		env[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	return (env);
+}
+
+char **ft_add_str_to_arr(char *var, char **env)
+{
+	char **new_env;
+	int strings;
+	int i;
+
+	strings = ft_arrlen(env) + 1;
+	new_env = malloc((strings + 1) * sizeof(void *));
+	if (!new_env)
+	{
+		// TODO error management: allocation failed
+	}
+	new_env[strings] = 0;
+	i = 0;
+	while (i < strings - 1)
+	{
+		new_env[i] = ft_strdup(env[i]);
+		i++;
+	}
+	new_env[i] = ft_strdup(var);
+	free(env);
+	return (new_env);
 }

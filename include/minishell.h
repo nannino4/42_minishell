@@ -9,23 +9,32 @@
 # include <readline/history.h>
 # include "libft.h"
 
-/* commands */
-
-void	ft_check_echo(char **stringa);
+typedef struct  s_data
+{
+    char *line;
+    char **env;
+    char **local_env;
+}               t_data;
 
 /* utils */
 
 int	ft_istoken(char c);
+int	ft_isspace(char c);
+int ft_isquotes(char c);
+
 char	*ft_get_name(char *line, int *i);
 int	ft_skip_spaces(char *line, int i);
+char **ft_env_creation(char **envp);
 
 /* parsing */
 
-void	ft_parse_and_execute(char *line);
-void	ft_parse(char **line);
+void	ft_parse_and_execute(t_data *data);
+void	ft_parse(t_data *data);
 
 int	ft_check_for_single_quotes(char **line, int i);
 int	ft_check_for_double_quotes(char **line, int i);
+
+int	ft_check_for_variables(char **line, int i);
 
 int    ft_check_for_redir(char **line, int i);
 void	ft_input_redir(char **line, int i);

@@ -4,23 +4,23 @@
 ** ft_parse takes line as input, cycles through it iterating on "i" and subsitutes every token with its effect
 */
 
-void	ft_parse(char **line)
+void	ft_parse(t_data *data)
 {
 	int i;
 
 	i = 0;
-	while ((*line)[i])
+	while ((data->line)[i])
 	{
-		if ((*line)[i] == '\'')
-			i = ft_check_for_single_quotes(line, i);
-		else if ((*line)[i] == '\"')
-			i = ft_check_for_double_quotes(line, i);
-		else if ((*line)[i] == '<' || (*line)[i] == '>')
-			i = ft_check_for_redir(line, i);
-		// else if ((*line)[i] == '$')
-		// 	i = ft_check_for_variables(line, i);
-		// else if ((*line)[i] == '|')
-		// 	i = ft_check_for_pipes(line, i);
+		if ((data->line)[i] == '\'')
+			i = ft_check_for_single_quotes(&data->line, i);
+		else if ((data->line)[i] == '\"')
+			i = ft_check_for_double_quotes(&data->line, i);
+		else if ((data->line)[i] == '<' || (data->line)[i] == '>')
+			i = ft_check_for_redir(&data->line, i);
+		else if ((data->line)[i] == '$')
+		 	i = ft_check_for_variables(&data->line, i);
+		// else if ((data->line)[i] == '|')
+		// 	i = ft_check_for_pipes(&data->line, i);
 		i++;
 	}
 }
@@ -49,20 +49,16 @@ char	*ft_get_command(char **line)
 	return (command);
 }
 
-void	ft_parse_and_execute(char *line)
+void	ft_parse_and_execute(t_data *data)
 {
 	char	*command;
 
-	if (line && *line)
+	if (data->line && *data->line)
 	{
-		command = ft_get_command(&line);
-		if (command)
-		{
-			printf("il comando é: %s\n", command);
-		}
+		command = ft_get_command(&data->line);
+		printf("command:%s\n", command);
 		// ft_check_command(command); 				//TODO vedo se esiste il comando
-		ft_parse(&line);						//TODO parsing di <, >, >>, <<
-		printf("la linea rimanente dopo il parsing é:%s\n\n", line);
+		ft_parse(data);
+		printf("remaining line:%s\n", data->line);
 	}
-	
 }
