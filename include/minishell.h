@@ -22,7 +22,7 @@ int	ft_istoken(char c);
 int	ft_isspace(char c);
 int ft_isquotes(char c);
 
-char	*ft_get_name(char *line, int *i);
+char	*ft_get_name(char **line, int *i);
 int	ft_skip_spaces(char *line, int i);
 char **ft_env_creation(char **envp);
 

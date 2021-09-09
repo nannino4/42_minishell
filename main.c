@@ -6,6 +6,7 @@ int main(int argc, char **argv, char **envp)
     t_data data;
 
     argc = 0;
+    // data.line = ft_strdup(argv[1]);
     argv = 0;
     data.env = ft_env_creation(envp);
     data.line = readline("# Orders, my Lord? ");
@@ -22,7 +23,7 @@ int main(int argc, char **argv, char **envp)
         else
         {
             wait(0);
-            // TODO controlla se va fatto free(line)
+            free(data.line);
             data.line = readline("# Orders, my Lord? ");
             if (data.line && ft_strlen(data.line) > 0)
                 add_history(data.line);

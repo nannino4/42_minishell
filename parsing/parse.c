@@ -26,6 +26,29 @@ void	ft_parse(t_data *data)
 }
 
 /*
+** ft_get_name takes line as input, and gives back the first word before spaces or tokens, setting "i" at the end 
+*/
+
+char	*ft_get_name(char **line, int *i)
+{
+	int	start;
+
+	*i = ft_skip_spaces(*line, *i);
+	start = *i;
+	while ((*line)[*i] && !ft_istoken((*line)[*i]) && (*line)[*i] != ' ')
+	{
+		if ((*line)[*i] == '\'')
+			*i = ft_check_for_single_quotes(line, *i);
+		else if ((*line)[*i] == '\"')
+			*i = ft_check_for_double_quotes(line, *i);
+		else if ((*line)[*i] == '$')
+			*i = ft_check_for_variables(line, *i);
+		(*i)++;
+	}
+	return (ft_substr(*line, start, *i - start));
+}
+
+/*
 **  "ft_get_command" takes line as input, cuts the first word out of it and gives it back as output
 */
 
@@ -36,13 +59,11 @@ char	*ft_get_command(char **line)
 	int		i;
 
 	i = 0;
-	command = ft_get_name(*line, &i);
+	command = ft_get_name(line, &i);
 	tmp = ft_substr(*line, i, ft_strlen(*line));
 	if (!tmp)
 	{
 		//TODO error: allocation failed
-		printf("allocazione fallita\n");
-		return (0);
 	}
 	free(*line);
 	*line = tmp;

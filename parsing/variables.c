@@ -23,6 +23,7 @@ void    ft_switch_var_value(char **line, char *value, int i, int j)
     len_tmp = ft_strlen(*line);
     while (i < len_tmp)
         new_line[j + k++] = (*line)[i++];
+    new_line[j + k] = 0;
     free(*line);
     *line = new_line;
 }
@@ -42,6 +43,7 @@ int	ft_check_for_variables(char **line, int i)
     if (len == 0)
         return (i);
     tmp = ft_substr(*line, j + 1, len);
+    // value = "gcefalo";
     value = getenv(tmp);
     free(tmp);
     if (!value)
