@@ -9,6 +9,9 @@
 # include <readline/history.h>
 # include "libft.h"
 
+# define WITH_VARIABLES 1
+# define NO_VARIABLES 0
+
 typedef struct  s_data
 {
     char *line;
@@ -30,10 +33,10 @@ char *ft_getenv(char *var, char **env);
 
 void	ft_parse_and_execute(t_data *data);
 void	ft_parse(t_data *data);
-char    *ft_get_name(char **line, int *i, char **env);
+char    *ft_get_name(char **line, int *i, char **env, int flag);
 
 int	ft_check_for_single_quotes(char **line, int i);
-int	ft_check_for_double_quotes(char **line, int i, char **env);
+int	ft_check_for_double_quotes(char **line, int i, char **env, int flag);
 
 int	ft_check_for_variables(char **line, int i, char **env);
 

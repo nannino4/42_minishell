@@ -9,7 +9,7 @@ void	ft_input_redir(char **line, int i, char **env)
 
 	j = i;
 	i++;
-	name = ft_get_name(line, &i, env);
+	name = ft_get_name(line, &i, env, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -36,7 +36,7 @@ void	ft_output_redir(char **line, int i, char **env)
 
 	j = i;
 	i++;
-	name = ft_get_name(line, &i, env);
+	name = ft_get_name(line, &i, env, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -63,7 +63,7 @@ void	ft_double_output_redir(char **line, int i, char **env)
 
 	j = i;
 	i += 2;
-	name = ft_get_name(line, &i, env);
+	name = ft_get_name(line, &i, env, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -82,17 +82,32 @@ void	ft_double_output_redir(char **line, int i, char **env)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-// void	ft_double_input_redir(char **line, int i)
-// {
-// 	//TODO
-// }
+void	ft_double_input_redir(char **line, int i)
+{
+	char *buffer;
+	char *end_word;
+	char *tmp;
+	int j;
+
+	j = i;
+	i += 2;
+	end_word = ft_get_name(line, &i, 0, NO_VARIABLES);
+	buffer = ft_strdup("");
+	while (buffer && !(!ft_strncmp(buffer, end_word, ft_strlen(buffer)) && ft_strlen(buffer) == ft_strlen(end_word)))
+	{
+		tmp = ft_strjoin(buffer, readline(">"));
+		free(buffer);
+		buffer = tmp;
+	}
+	ft_cut_line_io_redir(line, i, j);
+}
 
 int    ft_check_for_redir(char **line, int i, char **env)
 {
     if ((*line)[i] == '>' && *line[i + 1] == '>')
 		ft_double_output_redir(line, i, env);
-    // else if ((*line)[i] == '<' && *line[i + 1] == '<')
-	// 	ft_double_input_redir(line, i, env);
+    else if ((*line)[i] == '<' && *line[i + 1] == '<')
+		ft_double_input_redir(line, i);
     else if ((*line)[i] == '<')
 		ft_input_redir(line, i, env);
     else if ((*line)[i] == '>')

@@ -29,16 +29,16 @@ void	ft_parse(t_data *data)
 ** ft_get_name takes line as input, and gives back the first word before spaces or tokens, setting "i" at the end 
 */
 
-int ft_check_command(char *command, char **env)
-{
+// int ft_check_command(char *command, char **env)
+// {
 	
-}
+// }
 
 /*
 ** ft_get_name takes line as input, and gives back the first word before spaces or tokens, setting "i" at the end 
 */
 
-char	*ft_get_name(char **line, int *i, char **env)
+char	*ft_get_name(char **line, int *i, char **env, int flag)
 {
 	int	start;
 
@@ -49,8 +49,8 @@ char	*ft_get_name(char **line, int *i, char **env)
 		if ((*line)[*i] == '\'')
 			*i = ft_check_for_single_quotes(line, *i);
 		else if ((*line)[*i] == '\"')
-			*i = ft_check_for_double_quotes(line, *i, env);
-		else if ((*line)[*i] == '$')
+			*i = ft_check_for_double_quotes(line, *i, env, flag);
+		else if (flag && (*line)[*i] == '$')
 			*i = ft_check_for_variables(line, *i, env);
 		(*i)++;
 	}
@@ -68,7 +68,7 @@ char	*ft_get_command(char **line, char **env)
 	int		i;
 
 	i = 0;
-	command = ft_get_name(line, &i, env);
+	command = ft_get_name(line, &i, env, WITH_VARIABLES);
 	tmp = ft_substr(*line, i, ft_strlen(*line));
 	if (!tmp)
 	{
@@ -87,7 +87,7 @@ void	ft_parse_and_execute(t_data *data)
 	{
 		command = ft_get_command(&data->line, data->env);
 		printf("command:%s\n", command);
-		ft_check_command(command, data->env);
+		// ft_check_command(command, data->env);
 		ft_parse(data);
 		printf("remaining line:%s\n", data->line);
 	}
