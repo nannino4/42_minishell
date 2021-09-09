@@ -15,7 +15,7 @@ int	ft_check_for_single_quotes(char **line, int i)
 	return (j);
 }
 
-int	ft_check_for_double_quotes(char **line, int i)
+int	ft_check_for_double_quotes(char **line, int i, char **env)
 {
 	int j;
 
@@ -24,7 +24,7 @@ int	ft_check_for_double_quotes(char **line, int i)
 	{
 		if ((*line)[i] == '$')
 		{
-			ft_check_for_variables(line, i);
+			ft_check_for_variables(line, i, env);
 		}
 		if ((*line)[i] == '\"')
 		{

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_input_redir(char **line, int i)
+void	ft_input_redir(char **line, int i, char **env)
 {
 	int file;
 	int j;
@@ -9,7 +9,7 @@ void	ft_input_redir(char **line, int i)
 
 	j = i;
 	i++;
-	name = ft_get_name(*line, &i);
+	name = ft_get_name(line, &i, env);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -28,7 +28,7 @@ void	ft_input_redir(char **line, int i)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-void	ft_output_redir(char **line, int i)
+void	ft_output_redir(char **line, int i, char **env)
 {
 	int file;
 	char *name;
@@ -36,7 +36,7 @@ void	ft_output_redir(char **line, int i)
 
 	j = i;
 	i++;
-	name = ft_get_name(*line, &i);
+	name = ft_get_name(line, &i, env);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -54,7 +54,7 @@ void	ft_output_redir(char **line, int i)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-void	ft_double_output_redir(char **line, int i)
+void	ft_double_output_redir(char **line, int i, char **env)
 {
 	int file;
 	int j;
@@ -63,7 +63,7 @@ void	ft_double_output_redir(char **line, int i)
 
 	j = i;
 	i += 2;
-	name = ft_get_name(*line, &i);
+	name = ft_get_name(line, &i, env);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -87,15 +87,15 @@ void	ft_double_output_redir(char **line, int i)
 // 	//TODO
 // }
 
-int    ft_check_for_redir(char **line, int i)
+int    ft_check_for_redir(char **line, int i, char **env)
 {
     if ((*line)[i] == '>' && *line[i + 1] == '>')
-		ft_double_output_redir(line, i);
+		ft_double_output_redir(line, i, env);
     // else if ((*line)[i] == '<' && *line[i + 1] == '<')
-	// 	ft_double_input_redir(line, i);
+	// 	ft_double_input_redir(line, i, env);
     else if ((*line)[i] == '<')
-		ft_input_redir(line, i);
+		ft_input_redir(line, i, env);
     else if ((*line)[i] == '>')
-		ft_output_redir(line, i);
+		ft_output_redir(line, i, env);
 	return (i); //TODO controlla output i
 }

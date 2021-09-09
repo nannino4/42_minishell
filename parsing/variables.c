@@ -28,7 +28,7 @@ void    ft_switch_var_value(char **line, char *value, int i, int j)
     *line = new_line;
 }
 
-int	ft_check_for_variables(char **line, int i)
+int	ft_check_for_variables(char **line, int i, char **env)
 {
 	int j;
     int len;
@@ -44,7 +44,7 @@ int	ft_check_for_variables(char **line, int i)
         return (i);
     tmp = ft_substr(*line, j + 1, len);
     // value = "gcefalo";
-    value = getenv(tmp);
+    value = ft_getenv(tmp, env);
     free(tmp);
     if (!value)
         value = ft_strdup("");
