@@ -12,7 +12,7 @@
 # define WITH_VARIABLES 1
 # define NO_VARIABLES 0
 
-typedef struct  s_commands
+typedef struct  s_list
 {
     struct s_commands *previous;
     struct s_commands *next;
@@ -20,11 +20,11 @@ typedef struct  s_commands
     char **split;
     int fd_out;
     int fd_in;
-}               t_commands;
+}               t_list;
 
 typedef struct  s_data
 {
-    t_commands list;
+    t_list list;
     char *line;
     char **env;
     char **local_env;
@@ -42,7 +42,7 @@ char *ft_getenv(char *var, char **env);
 
 /* parsing */
 
-void	ft_parse_and_execute(t_data *data);
+void	ft_parse_and_execute(t_data data);
 void	ft_parse(t_data *data);
 char    *ft_get_name(char **line, int *i, char **env, int flag);
 
