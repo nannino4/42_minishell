@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_input_redir(char **line, int i, char **env)
+void ft_input_redir(char **line, int i, char **env)
 {
 	int file;
 	int j;
@@ -28,7 +28,7 @@ void	ft_input_redir(char **line, int i, char **env)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-void	ft_output_redir(char **line, int i, char **env)
+void ft_output_redir(char **line, int i, char **env)
 {
 	int file;
 	char *name;
@@ -54,7 +54,7 @@ void	ft_output_redir(char **line, int i, char **env)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-void	ft_double_output_redir(char **line, int i, char **env)
+void ft_double_output_redir(char **line, int i, char **env)
 {
 	int file;
 	int j;
@@ -82,35 +82,58 @@ void	ft_double_output_redir(char **line, int i, char **env)
 	ft_cut_line_io_redir(line, i, j);
 }
 
-void	ft_double_input_redir(char **line, int i)
+void ft_readline(char *end_word, int *fd)
 {
-	char *buffer;
-	char *end_word;
 	char *tmp;
-	int j;
+	char *buffer;
 
+	buffer = readline(">");
+	while (buffer && !(!ft_strncmp(buffer, end_word, ft_strlen(buffer)) && ft_strlen(buffer) == ft_strlen(end_word)))
+	{
+		tmp = ft_strjoin(buffer, "\n");
+		free(buffer);
+		buffer = tmp;
+		ft_putstr_fd(buffer, fd[1]);
+		free(buffer);
+		buffer = readline(">");
+	}
+	if (buffer)
+		free(buffer);
+}
+
+void ft_double_input_redir(char **line, int i)
+{
+	char *end_word;
+	int j;
+	int fd[2];
+
+	if (pipe(fd))
+	{
+		//TODO error: pipe failed
+	}
 	j = i;
 	i += 2;
 	end_word = ft_get_name(line, &i, 0, NO_VARIABLES);
-	buffer = ft_strdup("");
-	while (buffer && !(!ft_strncmp(buffer, end_word, ft_strlen(buffer)) && ft_strlen(buffer) == ft_strlen(end_word)))
+	ft_readline(end_word, fd);
+	free(end_word);
+	close(fd[1]);
+	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
-		tmp = ft_strjoin(buffer, readline(">"));
-		free(buffer);
-		buffer = tmp;
+		//TODO error: dup2 failed
 	}
+	close(fd[0]);
 	ft_cut_line_io_redir(line, i, j);
 }
 
-int    ft_check_for_redir(char **line, int i, char **env)
+int ft_check_for_redir(char **line, int i, char **env)
 {
-    if ((*line)[i] == '>' && *line[i + 1] == '>')
+	if ((*line)[i] == '>' && (*line)[i + 1] == '>')
 		ft_double_output_redir(line, i, env);
-    else if ((*line)[i] == '<' && *line[i + 1] == '<')
+	else if ((*line)[i] == '<' && (*line)[i + 1] == '<')
 		ft_double_input_redir(line, i);
-    else if ((*line)[i] == '<')
+	else if ((*line)[i] == '<')
 		ft_input_redir(line, i, env);
-    else if ((*line)[i] == '>')
+	else if ((*line)[i] == '>')
 		ft_output_redir(line, i, env);
 	return (i); //TODO controlla output i
 }

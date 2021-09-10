@@ -14,7 +14,7 @@ void	ft_parse(t_data *data)
 		if ((data->line)[i] == '\'')
 			i = ft_check_for_single_quotes(&data->line, i);
 		else if ((data->line)[i] == '\"')
-			i = ft_check_for_double_quotes(&data->line, i, data->env);
+			i = ft_check_for_double_quotes(&data->line, i, data->env, WITH_VARIABLES);
 		else if ((data->line)[i] == '<' || (data->line)[i] == '>')
 			i = ft_check_for_redir(&data->line, i, data->env);
 		else if ((data->line)[i] == '$')
