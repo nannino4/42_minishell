@@ -4,10 +4,12 @@
 ** ft_parse takes line as input, cycles through it iterating on "i" and subsitutes every token with its effect
 */
 
-void	ft_parse(t_data *data)
+void ft_parse(t_data *data)
 {
 	int i;
 
+	if ((data->line)[i] == '|')
+		i = ft_check_for_pipes(&data->line, i);
 	i = 0;
 	while ((data->line)[i])
 	{
@@ -18,9 +20,7 @@ void	ft_parse(t_data *data)
 		else if ((data->line)[i] == '<' || (data->line)[i] == '>')
 			i = ft_check_for_redir(&data->line, i, data->env);
 		else if ((data->line)[i] == '$')
-		 	i = ft_check_for_variables(&data->line, i, data->env);
-		// else if ((data->line)[i] == '|')
-		// 	i = ft_check_for_pipes(&data->line, i);
+			i = ft_check_for_variables(&data->line, i, data->env);
 		i++;
 	}
 }
@@ -29,18 +29,27 @@ void	ft_parse(t_data *data)
 ** ft_get_name takes line as input, and gives back the first word before spaces or tokens, setting "i" at the end 
 */
 
-// int ft_check_command(char *command, char **env)
-// {
-	
-// }
+int ft_check_command(char *command, char **env)
+{
+	char *path;
+
+	path = ft_getenv("PATH", env);
+	if (!ft_strchr(command, '/') && path)
+	{
+		// TODO cerca nel path ed esegui
+	}
+	else
+	{
+	}
+}
 
 /*
 ** ft_get_name takes line as input, and gives back the first word before spaces or tokens, setting "i" at the end 
 */
 
-char	*ft_get_name(char **line, int *i, char **env, int flag)
+char *ft_get_name(char **line, int *i, char **env, int flag)
 {
-	int	start;
+	int start;
 
 	*i = ft_skip_spaces(*line, *i);
 	start = *i;
@@ -61,11 +70,11 @@ char	*ft_get_name(char **line, int *i, char **env, int flag)
 **  "ft_get_command" takes line as input, cuts the first word out of it and gives it back as output
 */
 
-char	*ft_get_command(char **line, char **env)
+char *ft_get_command(char **line, char **env)
 {
-	char	*command;
-	char	*tmp;
-	int		i;
+	char *command;
+	char *tmp;
+	int i;
 
 	i = 0;
 	command = ft_get_name(line, &i, env, WITH_VARIABLES);
@@ -79,16 +88,16 @@ char	*ft_get_command(char **line, char **env)
 	return (command);
 }
 
-void	ft_parse_and_execute(t_data *data)
+void ft_parse_and_execute(t_data *data)
 {
-	char	*command;
+	char *command;
 
 	if (data->line && *data->line)
 	{
 		command = ft_get_command(&data->line, data->env);
 		printf("command:%s\n", command);
-		// ft_check_command(command, data->env);
 		ft_parse(data);
 		printf("remaining line:%s\n", data->line);
+		ft_check_commands(command, data->env);
 	}
 }

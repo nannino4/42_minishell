@@ -12,8 +12,19 @@
 # define WITH_VARIABLES 1
 # define NO_VARIABLES 0
 
+typedef struct  s_commands
+{
+    struct s_commands *previous;
+    struct s_commands *next;
+    char *line;
+    char **split;
+    int fd_out;
+    int fd_in;
+}               t_commands;
+
 typedef struct  s_data
 {
+    t_commands list;
     char *line;
     char **env;
     char **local_env;
