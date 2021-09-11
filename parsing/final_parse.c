@@ -1,5 +1,17 @@
 #include "minishell.h"
 
+int ft_copy_string(t_list *list_elem, int i)
+{
+    while ((list_elem->line)[j] && (list_elem->line)[j] != ' ')
+    {
+        if ((list_elem->line)[i] == '\'')
+            ft_split_single_quotes(list_elem, i);
+        else if ((list_elem->line)[i] == '\"')
+            ft_split_double_quotes(list_elem, i);
+        j++;
+    }
+}
+
 void ft_create_strings(t_list *list_elem)
 {
     int i;
@@ -10,7 +22,13 @@ void ft_create_strings(t_list *list_elem)
     i = 0;
     while ((list_elem->line)[i])
     {
-        i = ft_skip_spaces(list_elem->line, i);
+        if (!ft_isspace((list_elem->line)[i]))
+        {
+            j = i;
+            i = ft_copy_string(list_elem, i);
+            *split = ft_substr(list_elem->line, j, i - j);
+            (*split)++;
+        }
         i++;
     }
 }
@@ -26,12 +44,12 @@ int ft_count_strings(char *line)
 void ft_split_command_argv(t_list *list_elem)
 {
     int strings;
-    
+
     strings = ft_count_strings(list_elem->line);
     if (strings == 0)
     {
         list_elem->split = 0;
-        return ;
+        return;
     }
     list_elem->split = malloc((strings + 1) * sizeof(char *));
     if (!list_elem->split)
