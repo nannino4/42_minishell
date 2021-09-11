@@ -1,13 +1,8 @@
 NAME		= minishell
 
 SRCS		=	\
-				parsing/cut_line.c \
-				parsing/io_redir.c \
 				parsing/parse.c \
-				parsing/quotes.c \
-				parsing/variables.c \
 				utils/utils.c \
-				utils/utils2.c \
 				main.c
 
 OBJS		= $(SRCS:.c=.o)

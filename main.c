@@ -1,5 +1,25 @@
 #include "minishell.h"
 
+void ft_parse_and_execute(t_data data)
+{
+	if (*(data.line))
+	{
+		if (ft_parse_pipes(&data))
+		{
+			//TODO error: pipes error
+		}
+		if (ft_parse_ioredir(&data))
+		{
+			//TODO error: ioredir error
+		}
+		if (ft_final_parse(&data))
+        {
+            //TODO error: final parse error
+        }
+		// ft_exec_commands(command, data->env);
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
     int pid;

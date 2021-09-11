@@ -1,5 +1,39 @@
 #include "minishell.h"
 
+int	ft_parse_single_quotes(char **line, int i)
+{
+	int j;
+
+	j = i;
+	while ((*line)[++i])
+	{
+		if ((*line)[i] == '\'')
+		{
+			return (ft_cut_line_quotes(line, i, j));
+		}
+	}
+	return (j);
+}
+
+int	ft_parse_double_quotes(char **line, int i, char **env, int flag)
+{
+	int j;
+
+	j = i;
+	while ((*line)[++i])
+	{
+		if (flag && (*line)[i] == '$' && ft_strchr(*line + i, '\"'))
+		{
+			ft_parse_variables(line, i, env);
+		}
+		if ((*line)[i] == '\"')
+		{
+			return (ft_cut_line_quotes(line, i, j));
+		}
+	}
+	return (j);
+}
+
 void    ft_switch_var_value(char **line, char *value, int i, int j)
 {
     char *new_line;
@@ -28,7 +62,7 @@ void    ft_switch_var_value(char **line, char *value, int i, int j)
     *line = new_line;
 }
 
-int	ft_check_for_variables(char **line, int i, char **env)
+int	ft_parse_variables(char **line, int i, char **env)
 {
 	int j;
     int len;
