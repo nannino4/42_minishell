@@ -1,47 +1,86 @@
 #include "minishell.h"
 
-// int ft_check_command(char *command, char **env)
-// {
-// 	char *path;
-
-// 	path = ft_getenv("PATH", env);
-// 	if (!ft_strchr(command, '/') && path)
-// 	{
-// 		// TODO cerca nel path ed esegui
-// 	}
-// 	else
-// 	{
-// 	}
-
-void ft_parse_and_execute(t_data data)
+void ft_set_io(t_list *list)
 {
-    char **split;
-
-    if (*(data.line))
+    if (list->fd_in != -1)
     {
-        if (ft_parse_pipes(&data))
+        if (dup2(list->fd_in, STDIN_FILENO) == -1)
+        {
+            //TODO error: dup2 failed
+        }
+        close(list->fd_in);
+    }
+    if (list->fd_out != -1)
+    {
+        if (dup2(list->fd_out, STDOUT_FILENO) == -1)
+        {
+            //TODO error: dup2 failed
+        }
+        close(list->fd_out);
+    }
+}
+
+void ft_exec_commands(t_data *data)
+{
+    int pid;
+    char *path;
+
+    path = ft_getenv("PATH", data->env);
+    while (data->list)
+    {
+        pid = fork();
+        if (pid == 0)
+        {
+            ft_set_io(data->list);
+            if (!ft_strchr((data->list->split)[0], '/') && path)
+            {
+                // TODO cerca nel path ed esegui
+            }
+            else
+            {
+                execve((data->list->split)[0], (data->list->split), data->env);
+                printf("execve non ha funzionato\n");
+            }
+            exit(0);
+        }
+        else
+        {
+            wait(0);
+            data->list = data->list->next;
+        }
+    }
+}
+
+void ft_parse_and_execute(t_data *data)
+{
+    // char **split;
+
+    if (*(data->line))
+    {
+        if (ft_parse_pipes(data))
         {
             //TODO error: pipes error
         }
-        if (ft_parse_ioredir(&data))
+        if (ft_parse_ioredir(data))
         {
             //TODO error: ioredir error
         }
-        if (ft_final_parse(&data))
+        if (ft_final_parse(data))
         {
             //TODO error: final parse error
         }
-        while (data.list)
-        {
-            split = data.list->split;
-            while (*split)
-            {
-                printf("%p %s\n", data.list, *split);
-                split++;
-            }
-            data.list = data.list->next;
-        }
-        // ft_exec_commands(command, data->env);
+        ft_exec_commands(data);
+        // while (data->list)
+        // {
+        //     split = data->list->split;
+        //     while (*split)
+        //     {
+        //         printf("%p %s\n", data->list, *split);
+        //         split++;
+        //     }
+        //     data->list = data->list->next;
+        // }
+        ft_free_list(data->list);
     }
 }
 
@@ -72,7 +111,7 @@ int main(int argc, char **argv, char **envp)
         pid = fork();
         if (pid == 0)
         {
-            ft_parse_and_execute(data);
+            ft_parse_and_execute(&data);
             exit(0);
         }
         else
