@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void ft_input_redir(t_list *head, int i, char **env)
+int ft_input_redir(t_list *head, int i, char **env)
 {
 	int file;
 	int j;
@@ -26,10 +26,10 @@ void ft_input_redir(t_list *head, int i, char **env)
 	// 	//TODO error: dup2 failed
 	// }
 	// close(file);
-	ft_cut_line_io_redir(&(head->line), i, j);
+	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-void ft_output_redir(t_list *head, int i, char **env)
+int ft_output_redir(t_list *head, int i, char **env)
 {
 	int file;
 	char *name;
@@ -50,10 +50,10 @@ void ft_output_redir(t_list *head, int i, char **env)
 	if (head->fd_out != -1)
 		close(head->fd_out);
 	head->fd_out = file;
-	ft_cut_line_io_redir(&(head->line), i, j);
+	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-void ft_double_output_redir(t_list *head, int i, char **env)
+int ft_double_output_redir(t_list *head, int i, char **env)
 {
 	int file;
 	int j;
@@ -74,10 +74,10 @@ void ft_double_output_redir(t_list *head, int i, char **env)
 	if (head->fd_out != -1)
 		close(head->fd_out);
 	head->fd_out = file;
-	ft_cut_line_io_redir(&(head->line), i, j);
+	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-void ft_double_input_redir(t_list *head, int i)
+int ft_double_input_redir(t_list *head, int i)
 {
 	char *end_word;
 	int j;
@@ -101,7 +101,7 @@ void ft_double_input_redir(t_list *head, int i)
 	// 	//TODO error: dup2 failed
 	// }
 	// close(fd[0]);
-	ft_cut_line_io_redir(&(head->line), i, j);
+	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
 int ft_parse_ioredir(t_data *data)
@@ -117,13 +117,13 @@ int ft_parse_ioredir(t_data *data)
 		{
 			i = ft_skip_quotes(head->line, i);
 			if ((head->line)[i] == '>' && (head->line)[i + 1] == '>')
-				ft_double_output_redir(head, i, data->env);
+				i = ft_double_output_redir(head, i, data->env);
 			else if ((head->line)[i] == '<' && (head->line)[i + 1] == '<')
-				ft_double_input_redir(head, i);
+				i = ft_double_input_redir(head, i);
 			else if ((head->line)[i] == '<')
-				ft_input_redir(head, i, data->env);
+				i = ft_input_redir(head, i, data->env);
 			else if ((head->line)[i] == '>')
-				ft_output_redir(head, i, data->env);
+				i = ft_output_redir(head, i, data->env);
 			i++;
 		}
 		head = head->next;

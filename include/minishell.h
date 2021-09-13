@@ -55,7 +55,7 @@ int	ft_parse_single_quotes(char **line, int i);
 int	ft_parse_double_quotes(char **line, int i, char **env, int flag);
 int	ft_parse_variables(char **line, int i, char **env);
 
-void ft_cut_line_io_redir(char **line, int i, int j);
+int ft_cut_line_io_redir(char **line, int i, int j);
 
 /* error */
 

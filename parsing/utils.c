@@ -1,9 +1,11 @@
 #include "minishell.h"
 
-void	ft_cut_line_io_redir(char **line, int i, int j)
+int	ft_cut_line_io_redir(char **line, int i, int j)
 {
 	int diff;
+    int start;
 
+    start = j;
 	diff = i - j;
 	while (j < ft_strlen(*line) - diff)
 	{
@@ -11,6 +13,7 @@ void	ft_cut_line_io_redir(char **line, int i, int j)
 		j++;
 	}
 	(*line)[j] = 0;
+    return (start - 1);
 }
 
 void ft_readline(char *end_word, int *fd)
