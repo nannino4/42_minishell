@@ -15,7 +15,7 @@ OBJS		= $(SRCS:.c=.o)
 CFLAGS		= -Wall -Wextra -Werror
 
 %.o :		%.c
-			gcc -c -I./include -I./libft $(CFLAGS) $< -o $@
+			gcc -c -g -I./include -I./libft $(CFLAGS) $< -o $@
 
 $(NAME):	$(OBJS)
 			make -C libft

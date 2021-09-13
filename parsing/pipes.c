@@ -22,11 +22,10 @@ void ft_cut_pipe(t_data *data, int i)
 		elem->fd_in = fd[0];
 		elem->previous->fd_out = fd[1];
 	}
-	while (*(data->line) != '|')
-	{
+	while (*(data->line) && *(data->line) != '|')
 		(data->line)++;
-	}
-	(data->line)++;
+	if (*(data->line) == '|')
+		(data->line)++;
 }
 
 int ft_parse_pipes(t_data *data)
@@ -39,7 +38,7 @@ int ft_parse_pipes(t_data *data)
 	while ((data->line)[i])
 	{
 		i = ft_skip_quotes(data->line, i);
-		if (!ft_isspace((data->line)[i]))
+		if ((data->line)[i] != '|' && !ft_isspace((data->line)[i]))
 			word_flag = 1;
 		else if ((data->line)[i] == '|')
 		{

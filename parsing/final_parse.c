@@ -36,25 +36,32 @@ void ft_create_strings(t_list *list_elem, char **env)
                 //TODO error: split allocation failed
             }
             split++;
+            i--;
         }
     }
+    *split = 0;
 }
 
 int ft_count_strings(char *line)
 {
     int strings;
+    int i;
 
     strings = 0;
-    while (line && *line)
+    i = 0;
+    while (line && line[i])
     {
-        if (!ft_isspace(*line))
+        if (!ft_isspace(line[i]))
         {
-            while (*line && !ft_isspace(*line))
-                line++;
+            while (line[i] && !ft_isspace(line[i]))
+            {
+                i = ft_skip_quotes(line, i);
+                i++;
+            }
             strings++;
-            line--;
+            i--;
         }
-        line++;
+        i++;
     }
     return (strings);
 }

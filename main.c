@@ -31,11 +31,15 @@ void ft_parse_and_execute(t_data data)
         {
             //TODO error: final parse error
         }
-        split = data.list->split;
-        while (*split)
+        while (data.list)
         {
-            printf("%s\n", *split);
-            split++;
+            split = data.list->split;
+            while (*split)
+            {
+                printf("%p %s\n", data.list, *split);
+                split++;
+            }
+            data.list = data.list->next;
         }
         // ft_exec_commands(command, data->env);
     }
@@ -58,8 +62,8 @@ int main(int argc, char **argv, char **envp)
     {
         //TODO error: too many arguments
     }
-    argv = 0;
     // data.line = ft_strdup(argv[1]);
+    argv = 0;
     ft_init_data(&data, envp);
     if (data.line && ft_strlen(data.line) > 0)
         add_history(data.line);
