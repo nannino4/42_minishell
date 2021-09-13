@@ -9,7 +9,10 @@ void ft_cut_pipe(t_data *data, int i)
 	elem->line = ft_substr(data->line, 0, i);
 	elem->fd_in = -1;
 	elem->fd_out = -1;
-	ft_add_elem(data->list, elem);
+	elem->split = 0;
+	elem->next = 0;
+	elem->previous = 0;
+	ft_add_elem(data, elem);
 	if (elem->previous)
 	{
 		if (pipe(fd))

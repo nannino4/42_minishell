@@ -1,8 +1,13 @@
 NAME		= minishell
 
 SRCS		=	\
-				parsing/parse.c \
+				parsing/final_parse.c \
+				parsing/ioredir.c \
+				parsing/pipes.c \
+				parsing/quotes_and_variables.c \
+				parsing/utils.c \
 				utils/utils.c \
+				utils/utils2.c \
 				main.c
 
 OBJS		= $(SRCS:.c=.o)
@@ -10,7 +15,7 @@ OBJS		= $(SRCS:.c=.o)
 CFLAGS		= -Wall -Wextra -Werror
 
 %.o :		%.c
-			gcc -c -g -I./include -I./libft $(CFLAGS) $< -o $@
+			gcc -c -I./include -I./libft $(CFLAGS) $< -o $@
 
 $(NAME):	$(OBJS)
 			make -C libft

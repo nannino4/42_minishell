@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+void ft_add_elem(t_data *data, t_list *elem)
+{
+	t_list *list;
+
+    if (!(data->list))
+	{
+		data->list = elem;
+		return ;
+	}
+	list = data->list;
+	while (list->next)
+		list = list->next;
+	list->next = elem;
+	elem->previous = list;
+}
+
 char *ft_getenv(char *var, char **env)
 {
 	char *value;

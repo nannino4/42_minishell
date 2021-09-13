@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+int	ft_cut_line_quotes(char **line, int i, int j)
+{
+	while (j < i - 1)
+	{
+		(*line)[j] = (*line)[j + 1];
+		j++;
+	}
+	while (j < ft_strlen(*line) - 2)
+	{
+		(*line)[j] = (*line)[j + 2];
+		j++;
+	}
+	(*line)[j] = 0;
+	return (i - 2);
+}
+
 int	ft_parse_single_quotes(char **line, int i)
 {
 	int j;

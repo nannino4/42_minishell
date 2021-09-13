@@ -1,5 +1,24 @@
 #include "minishell.h"
 
+char *ft_get_name(char **line, int *i, char **env, int flag)
+{
+	int start;
+
+	*i = ft_skip_spaces(*line, *i);
+	start = *i;
+	while ((*line)[*i] && !ft_istoken((*line)[*i]) && (*line)[*i] != ' ')
+	{
+		if ((*line)[*i] == '\'')
+			*i = ft_parse_single_quotes(line, *i);
+		else if ((*line)[*i] == '\"')
+			*i = ft_parse_double_quotes(line, *i, env, flag);
+		else if (flag && (*line)[*i] == '$')
+			*i = ft_parse_variables(line, *i, env);
+		(*i)++;
+	}
+	return (ft_substr(*line, start, *i - start));
+}
+
 int ft_isquotes(char c)
 {
 	if (c == '\'' || c == '\"')

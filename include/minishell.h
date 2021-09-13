@@ -46,17 +46,19 @@ int ft_parse_pipes(t_data *data);
 int	ft_parse_ioredir(t_data *data);
 int ft_final_parse(t_data *data);
 
-void ft_add_elem(t_list *head, t_list *elem);
+void ft_add_elem(t_data *data, t_list *elem);
 char *ft_get_name(char **line, int *i, char **env, int flag);
 void ft_readline(char *end_word, int *fd);
 int ft_skip_quotes(char *line, int i);
 
 int	ft_parse_single_quotes(char **line, int i);
 int	ft_parse_double_quotes(char **line, int i, char **env, int flag);
-
 int	ft_parse_variables(char **line, int i, char **env);
 
 void	ft_cut_line_io_redir(char **line, int i, int j);
-int	ft_cut_line_quotes(char **line, int i, int j);
+
+/* error */
+
+void ft_free_list(t_list *list);
 
 #endif
