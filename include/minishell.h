@@ -40,6 +40,11 @@ int	ft_skip_spaces(char *line, int i);
 char **ft_env_creation(char **envp);
 char *ft_getenv(char *var, char **env);
 
+/* exec */
+
+void ft_exec(t_data *data);
+int ft_set_var(char *var, char *value);
+
 /* parsing */
 
 int ft_parse_pipes(t_data *data);
@@ -57,8 +62,9 @@ int	ft_parse_variables(char **line, int i, char **env);
 
 void ft_cut_line_io_redir(char **line, int i, int j);
 
-/* error */
+/* free */
 
+void ft_free_split(char **split);
 void ft_free_list(t_list *list);
 
 #endif

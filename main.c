@@ -1,56 +1,5 @@
 #include "minishell.h"
 
-void ft_set_io(t_list *list)
-{
-    if (list->fd_in != -1)
-    {
-        if (dup2(list->fd_in, STDIN_FILENO) == -1)
-        {
-            //TODO error: dup2 failed
-        }
-        close(list->fd_in);
-    }
-    if (list->fd_out != -1)
-    {
-        if (dup2(list->fd_out, STDOUT_FILENO) == -1)
-        {
-            //TODO error: dup2 failed
-        }
-        close(list->fd_out);
-    }
-}
-
-void ft_exec_commands(t_data *data)
-{
-    int pid;
-    char *path;
-
-    path = ft_getenv("PATH", data->env);
-    while (data->list)
-    {
-        pid = fork();
-        if (pid == 0)
-        {
-            ft_set_io(data->list);
-            if (!ft_strchr((data->list->split)[0], '/') && path)
-            {
-                // TODO cerca nel path ed esegui
-            }
-            else
-            {
-                execve((data->list->split)[0], (data->list->split), data->env);
-                printf("execve non ha funzionato\n");
-            }
-            exit(0);
-        }
-        else
-        {
-            wait(0);
-            data->list = data->list->next;
-        }
-    }
-}
-
 void ft_parse_and_execute(t_data *data)
 {
     // char **split;
@@ -69,7 +18,7 @@ void ft_parse_and_execute(t_data *data)
         {
             //TODO error: final parse error
         }
-        ft_exec_commands(data);
+        ft_exec(data);
         // while (data->list)
         // {
         //     split = data->list->split;
@@ -80,14 +29,13 @@ void ft_parse_and_execute(t_data *data)
         //     }
         //     data->list = data->list->next;
         // }
-        ft_free_list(data->list);
     }
 }
 
 void ft_init_data(t_data *data, char **envp)
 {
     data->env = ft_env_creation(envp);
-    data->line = readline("# Orders, my Lord? ");
+    data->line = readline("# Orders, my Lord? >:");
     data->list = 0;
     data->local_env = 0;
 }
@@ -118,7 +66,7 @@ int main(int argc, char **argv, char **envp)
         {
             wait(0);
             free(data.line);
-            data.line = readline("# Orders, my Lord? ");
+            data.line = readline("# Orders, my Lord? >:");
             if (data.line && ft_strlen(data.line) > 0)
                 add_history(data.line);
         }
