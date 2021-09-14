@@ -2,8 +2,6 @@
 
 void ft_parse_and_execute(t_data *data)
 {
-    // char **split;
-
     if (*(data->line))
     {
         if (ft_parse_pipes(data))
@@ -19,23 +17,13 @@ void ft_parse_and_execute(t_data *data)
             //TODO error: final parse error
         }
         ft_exec(data);
-        // while (data->list)
-        // {
-        //     split = data->list->split;
-        //     while (*split)
-        //     {
-        //         printf("%p %s\n", data->list, *split);
-        //         split++;
-        //     }
-        //     data->list = data->list->next;
-        // }
     }
 }
 
 void ft_init_data(t_data *data, char **envp)
 {
     data->env = ft_env_creation(envp);
-    data->line = readline("# Orders, my Lord? >:");
+    data->line = readline("# Orders, my Lord? >: ");
     data->list = 0;
     data->local_env = 0;
 }
@@ -66,7 +54,7 @@ int main(int argc, char **argv, char **envp)
         {
             wait(0);
             free(data.line);
-            data.line = readline("# Orders, my Lord? >:");
+            data.line = readline("# Orders, my Lord? >: ");
             if (data.line && ft_strlen(data.line) > 0)
                 add_history(data.line);
         }

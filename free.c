@@ -1,29 +1,48 @@
 #include "minishell.h"
 
+void ft_close_fd(t_list *list)
+{
+    if (list->fd_in != -1)
+        close(list->fd_in);
+    list->fd_in = -1;
+    if (list->fd_out != -1)
+        close(list->fd_out);
+    list->fd_out = -1;
+}
+
 void ft_free_list(t_list *list)
 {
-    char *tmp;
+    char *tmp_line;
+    t_list *tmp_list;
+    char **tmp_split;
 
     while (list)
     {
+        tmp_split = list->split;
         while (*(list->split))
         {
-            tmp = *(list->split);
+            tmp_line = *(list->split);
             (list->split)++;
-            free(tmp);
+            free(tmp_line);
         }
-        free(list->split);
+        free(tmp_split);
         free(list->line);
+        tmp_list = list;
         list = list->next;
+        free(tmp_list);
     }
 }
 
-void ft_free_split(char **split)
+void ft_free_path(char **path)
 {
-    while (split && *split)
+    char **tmp;
+
+    tmp = path;
+    while (path && *path)
     {
-        free(*split);
-        split++;
+        free(*path);
+        path++;
     }
-    free(split);
+    if (tmp)
+        free(tmp);
 }

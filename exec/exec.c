@@ -1,25 +1,5 @@
 #include "minishell.h"
 
-void ft_set_io(t_list *list)
-{
-    if (list->fd_in != -1)
-    {
-        if (dup2(list->fd_in, STDIN_FILENO) == -1)
-        {
-            //TODO error: dup2 failed
-        }
-        close(list->fd_in);
-    }
-    if (list->fd_out != -1)
-    {
-        if (dup2(list->fd_out, STDOUT_FILENO) == -1)
-        {
-            //TODO error: dup2 failed
-        }
-        close(list->fd_out);
-    }
-}
-
 void ft_exec_child2(char *command, char **argv, char **env)
 {
     execve(command, argv, env);
@@ -32,11 +12,13 @@ void ft_exec_parent2(int pid, char *command)
 
     waitpid(pid, &wstatus, 0);
     free(command);
-    if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0)
+    if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 127)
+    {
         exit(WEXITSTATUS(wstatus));
+    }
 }
 
-int ft_exec_child1(t_data *data, char **path)
+void ft_exec_child1(t_data *data, char **path)
 {
     int pid;
     char *command;
@@ -46,7 +28,7 @@ int ft_exec_child1(t_data *data, char **path)
     {
         while (path && *path)
         {
-            command = ft_strjoin(*path, data->list->split[0]);
+            command = ft_join_path_and_cmd(*path, data->list->split[0]);
             pid = fork();
             if (pid == 0)
                 ft_exec_child2(command, data->list->split, data->env);
@@ -60,20 +42,14 @@ int ft_exec_child1(t_data *data, char **path)
     exit(127);
 }
 
-void ft_exec_parent1(int pid, char *command, char **path, t_list *list)
+int ft_exec_parent1(int pid, char *command)
 {
     int wstatus;
 
     waitpid(pid, &wstatus, 0);
-    // ft_set_var("?", WEXITSTATUS(wstatus));
-    if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0)
-    {
-        if (WEXITSTATUS(wstatus) == 127)
-            printf("I apologize my Lord, I could not find you command: %s\nSpare my life, I beg you..\n", command);
-        ft_free_split(path);
-        ft_free_list(list);
-        exit(WEXITSTATUS(wstatus));
-    }
+    if (WEXITSTATUS(wstatus) == 127)
+        printf("I apologize my Lord, I could not find your command: %s\nHave mercy, I beg you! ...\n", command);
+    return (wstatus);
 }
 
 void ft_exec(t_data *data)
@@ -81,6 +57,7 @@ void ft_exec(t_data *data)
     int pid;
     char **path;
     t_list *list;
+    int wstatus;
 
     list = data->list;
     while (data->list)
@@ -90,9 +67,11 @@ void ft_exec(t_data *data)
         if (pid == 0)
             ft_exec_child1(data, path);
         else
-            ft_exec_parent1(pid, data->list->split[0], path, list);
+            wstatus = ft_exec_parent1(pid, data->list->split[0]);
+        ft_close_fd(data->list);
         data->list = data->list->next;
-        ft_free_split(path);
+        ft_free_path(path);
     }
     ft_free_list(list);
+    ft_set_var("?", ft_itoa(WEXITSTATUS(wstatus)));
 }
