@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+void ft_set_var(char *name, char *value, t_data *data)
+{
+    char *var;
+    char *tmp;
+
+    tmp = ft_strjoin(name, "=");
+    var = ft_strjoin(tmp, value);
+    free(tmp);
+    if (ft_getenv(name, data->env))
+        ft_replace_var(name, var, data->env);
+    else
+        ft_add_var(var, data);
+    free(var);
+}
+
 char *ft_join_path_and_cmd(char *path, char *command)
 {
     char *tmp;

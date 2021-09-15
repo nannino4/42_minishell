@@ -1,8 +1,12 @@
 NAME		= minishell
 
 SRCS		=	\
-				exec/exec.c \
 				exec/builtin.c \
+				exec/env.c \
+				exec/exec.c \
+				exec/exit.c \
+				exec/export.c \
+				exec/unset.c \
 				exec/utils.c \
 				parsing/final_parse.c \
 				parsing/ioredir.c \

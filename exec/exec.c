@@ -62,7 +62,7 @@ void ft_exec(t_data *data)
     int wstatus;
 
     list = data->list;
-    while (data->list)
+    while (data->list && !data->exit_flag)
     {
         path = ft_split(ft_getenv("PATH", data->env), ':');
         pid = fork();
@@ -72,10 +72,9 @@ void ft_exec(t_data *data)
             wstatus = ft_exec_parent1(pid, data->list->split[0]);
         ft_close_fd(data->list);
         data->list = data->list->next;
-        ft_free_path(path);
+        ft_free_arr(path);
     }
-    ft_free_list(list);
     free(data->status_var);
     data->status_var = ft_itoa(WEXITSTATUS(wstatus));
-    exit(WEXITSTATUS(wstatus));
+    ft_free_list(list);
 }

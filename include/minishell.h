@@ -29,6 +29,7 @@ typedef struct  s_data
     char *line;
     char **env;
     char *status_var;
+    int exit_flag;
 }               t_data;
 
 /* utils */
@@ -40,15 +41,23 @@ int ft_isquotes(char c);
 int	ft_skip_spaces(char *line, int i);
 char **ft_env_creation(char **envp);
 char *ft_getenv(char *var, char **env);
+int	ft_arrlen(char **arr);
 
 /* exec */
 
 void ft_exec(t_data *data);
 void ft_set_io(t_list *list);
 char *ft_join_path_and_cmd(char *path, char *command);
+void ft_add_var(char *var, t_data *data);
+void ft_replace_var(char *name, char *var, char **env);
+void ft_set_var(char *var, char *value, t_data *data);
 
 int ft_check_builtin(char *command);
 void ft_exec_builtin(char *command, t_data *data);
+void ft_unset(t_data *data);
+void ft_exit(t_data *data);
+void ft_export(t_data *data);
+void ft_env(t_data *data);
 
 /* parsing */
 
@@ -70,7 +79,7 @@ int ft_cut_line_io_redir(char **line, int i, int j);
 /* free */
 
 void ft_close_fd(t_list *list);
-void ft_free_path(char **path);
+void ft_free_arr(char **path);
 void ft_free_list(t_list *list);
 
 #endif

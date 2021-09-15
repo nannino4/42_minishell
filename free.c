@@ -33,15 +33,15 @@ void ft_free_list(t_list *list)
     }
 }
 
-void ft_free_path(char **path)
+void ft_free_arr(char **arr)
 {
     char **tmp;
 
-    tmp = path;
-    while (path && *path)
+    tmp = arr;
+    while (arr && *arr)
     {
-        free(*path);
-        path++;
+        free(*arr);
+        arr++;
     }
     if (tmp)
         free(tmp);

@@ -18,7 +18,6 @@ void ft_parse_and_execute(t_data *data)
         }
         ft_exec(data);
     }
-    exit(0);
 }
 
 void ft_init_data(t_data *data, char **envp)
@@ -27,35 +26,34 @@ void ft_init_data(t_data *data, char **envp)
     data->line = readline("# Orders, my Lord? >: ");
     data->list = 0;
     data->status_var = ft_strdup("0");
+    data->exit_flag = 0;
+    //TODO increment variable SHLVL
 }
+
+//TODO    setta la variabile '_' come ultima stringa dell'ultimo split, ma nell'env deve rimanere /usr/bin/env
 
 int main(int argc, char **argv, char **envp)
 {
-    int pid;
     t_data data;
 
     if (argc > 1)
     {
         //TODO error: too many arguments
     }
-    // data.line = ft_strdup(argv[1]);
     argv = 0;
     ft_init_data(&data, envp);
     if (data.line && ft_strlen(data.line) > 0)
         add_history(data.line);
     while (data.line)
     {
-        pid = fork();
-        if (pid == 0)
-            ft_parse_and_execute(&data);
-        else
-        {
-            waitpid(pid, 0, 0);
-            free(data.line);
-            data.line = readline("# Orders, my Lord? >: ");
-            if (data.line && ft_strlen(data.line) > 0)
-                add_history(data.line);
-        }
+        ft_parse_and_execute(&data);
+        free(data.line);
+        if (data.exit_flag)
+            break;
+        data.line = readline("# Orders, my Lord? >: ");
+        if (data.line && ft_strlen(data.line) > 0)
+            add_history(data.line);
     }
     printf("\nexit\n");
+    exit(ft_atoi(data.status_var));
 }
