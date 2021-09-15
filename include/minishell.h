@@ -8,6 +8,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
+# include "color.h"
 
 # define WITH_VARIABLES 1
 # define NO_VARIABLES 0

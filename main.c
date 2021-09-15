@@ -18,6 +18,7 @@ void ft_parse_and_execute(t_data *data)
         }
         ft_exec(data);
     }
+    exit(0);
 }
 
 void ft_init_data(t_data *data, char **envp)
@@ -49,7 +50,7 @@ int main(int argc, char **argv, char **envp)
             ft_parse_and_execute(&data);
         else
         {
-            wait(0);
+            waitpid(pid, 0, 0);
             free(data.line);
             data.line = readline("# Orders, my Lord? >: ");
             if (data.line && ft_strlen(data.line) > 0)

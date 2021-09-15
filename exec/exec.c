@@ -24,9 +24,9 @@ void ft_exec_child1(t_data *data, char **path)
     char *command;
 
     ft_set_io(data->list);
-    if (ft_check_builtin(data->list->split[0]))
-        ft_exec_builtin(data->list->split[0], data);
-    else if (!ft_strchr((data->list->split)[0], '/') && path)
+    // if (ft_check_builtin(data->list->split[0]))
+    //     ft_exec_builtin(data->list->split[0], data);
+    if (!ft_strchr((data->list->split)[0], '/') && path)
     {
         while (path && *path)
         {
@@ -50,7 +50,7 @@ int ft_exec_parent1(int pid, char *command)
 
     waitpid(pid, &wstatus, 0);
     if (WEXITSTATUS(wstatus) == 127)
-        printf("I apologize my Lord, I could not find your command: %s\nHave mercy, I beg you! ...\n", command);
+        printf(HYEL"I apologize my Lord, I could not find your command: "BHBLU"%s\n"RESET, command);
     return (wstatus);
 }
 

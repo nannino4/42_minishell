@@ -8,7 +8,7 @@ int ft_input_redir(t_list *head, int i, t_data *data)
 
 	j = i;
 	i++;
-	name = ft_get_name(&(head->line), &i, data->env, WITH_VARIABLES);
+	name = ft_get_name(&(head->line), &i, data, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -37,7 +37,7 @@ int ft_output_redir(t_list *head, int i, t_data *data)
 
 	j = i;
 	i++;
-	name = ft_get_name(&(head->line), &i, data->env, WITH_VARIABLES);
+	name = ft_get_name(&(head->line), &i, data, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido

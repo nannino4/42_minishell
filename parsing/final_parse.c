@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-int ft_parse_quotes_and_variables(t_list *list_elem, int i, char **env)
+int ft_parse_quotes_and_variables(t_list *list_elem, int i, t_data *data)
 {
     if ((list_elem->line)[i] == '\'')
         i = ft_parse_single_quotes(&list_elem->line, i);
     else if ((list_elem->line)[i] == '\"')
-        i = ft_parse_double_quotes(&list_elem->line, i, env, WITH_VARIABLES);
+        i = ft_parse_double_quotes(&list_elem->line, i, data, WITH_VARIABLES);
     else if ((list_elem->line)[i] == '$')
-        i = ft_parse_variables(&list_elem->line, i, env);
+        i = ft_parse_variables(&list_elem->line, i, data->env, data->status_var);
     return (i);
 }
 
-void ft_create_strings(t_list *list_elem, char **env)
+void ft_create_strings(t_list *list_elem, t_data *data)
 {
     int i;
     int j;
@@ -27,7 +27,7 @@ void ft_create_strings(t_list *list_elem, char **env)
             while ((list_elem->line)[i] && !ft_isspace((list_elem->line)[i]))
             {
                 if ((list_elem->line)[i] == '\'' || (list_elem->line)[i] == '\"' || (list_elem->line)[i] == '$')
-                    i = ft_parse_quotes_and_variables(list_elem, i, env);
+                    i = ft_parse_quotes_and_variables(list_elem, i, data);
                 i++;
             }
             *split = ft_substr(list_elem->line, j, i - j);
@@ -66,7 +66,7 @@ int ft_count_strings(char *line)
     return (strings);
 }
 
-void ft_split_command_argv(t_list *list_elem, char **env)
+void ft_split_command_argv(t_list *list_elem, t_data *data)
 {
     int strings;
 
@@ -82,7 +82,7 @@ void ft_split_command_argv(t_list *list_elem, char **env)
         //TODO error: malloc failed
     }
     (list_elem->split)[strings] = 0;
-    ft_create_strings(list_elem, env);
+    ft_create_strings(list_elem, data);
 }
 
 int ft_final_parse(t_data *data)
@@ -92,7 +92,7 @@ int ft_final_parse(t_data *data)
     head = data->list;
     while (head)
     {
-        ft_split_command_argv(head, data->env);
+        ft_split_command_argv(head, data);
         head = head->next;
     }
     return (0);
