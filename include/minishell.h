@@ -27,7 +27,7 @@ typedef struct  s_data
     t_list *list;
     char *line;
     char **env;
-    char **local_env;
+    char *status_var;
 }               t_data;
 
 /* utils */
@@ -43,9 +43,11 @@ char *ft_getenv(char *var, char **env);
 /* exec */
 
 void ft_exec(t_data *data);
-int ft_set_var(char *var, char *value);
 void ft_set_io(t_list *list);
 char *ft_join_path_and_cmd(char *path, char *command);
+
+int ft_check_builtin(char *command);
+void ft_exec_builtin(char *command, t_data *data);
 
 /* parsing */
 
@@ -54,13 +56,13 @@ int	ft_parse_ioredir(t_data *data);
 int ft_final_parse(t_data *data);
 
 void ft_add_elem(t_data *data, t_list *elem);
-char *ft_get_name(char **line, int *i, char **env, int flag);
+char *ft_get_name(char **line, int *i, t_data *data, int flag);
 void ft_readline(char *end_word, int *fd);
 int ft_skip_quotes(char *line, int i);
 
 int	ft_parse_single_quotes(char **line, int i);
-int	ft_parse_double_quotes(char **line, int i, char **env, int flag);
-int	ft_parse_variables(char **line, int i, char **env);
+int	ft_parse_double_quotes(char **line, int i, t_data *data, int flag);
+int	ft_parse_variables(char **line, int i, char **env, char *status_var);
 
 int ft_cut_line_io_redir(char **line, int i, int j);
 

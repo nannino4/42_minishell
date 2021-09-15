@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char *ft_get_name(char **line, int *i, char **env, int flag)
+char *ft_get_name(char **line, int *i, t_data *data, int flag)
 {
 	int start;
 
@@ -11,9 +11,9 @@ char *ft_get_name(char **line, int *i, char **env, int flag)
 		if ((*line)[*i] == '\'')
 			*i = ft_parse_single_quotes(line, *i);
 		else if ((*line)[*i] == '\"')
-			*i = ft_parse_double_quotes(line, *i, env, flag);
+			*i = ft_parse_double_quotes(line, *i, data, flag);
 		else if (flag && (*line)[*i] == '$')
-			*i = ft_parse_variables(line, *i, env);
+			*i = ft_parse_variables(line, *i, data->env, data->status_var);
 		(*i)++;
 	}
 	return (ft_substr(*line, start, *i - start));

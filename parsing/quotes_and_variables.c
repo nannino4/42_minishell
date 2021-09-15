@@ -31,7 +31,7 @@ int	ft_parse_single_quotes(char **line, int i)
 	return (j);
 }
 
-int	ft_parse_double_quotes(char **line, int i, char **env, int flag)
+int	ft_parse_double_quotes(char **line, int i, t_data *data, int flag)
 {
 	int j;
 
@@ -40,7 +40,7 @@ int	ft_parse_double_quotes(char **line, int i, char **env, int flag)
 	{
 		if (flag && (*line)[i] == '$' && ft_strchr(*line + i, '\"'))
 		{
-			ft_parse_variables(line, i, env);
+			ft_parse_variables(line, i, data->env, data->status_var);
 		}
 		if ((*line)[i] == '\"')
 		{
@@ -78,7 +78,7 @@ void    ft_switch_var_value(char **line, char *value, int i, int j)
     *line = new_line;
 }
 
-int	ft_parse_variables(char **line, int i, char **env)
+int	ft_parse_variables(char **line, int i, char **env, char *status_var)
 {
 	int j;
     int len;
@@ -93,11 +93,13 @@ int	ft_parse_variables(char **line, int i, char **env)
     if (len == 0)
         return (i);
     tmp = ft_substr(*line, j + 1, len);
-    // value = "gcefalo";
-    value = ft_getenv(tmp, env);
-    free(tmp);
+    if (len == 1 && !ft_strncmp(tmp, "?", 1))
+        value = status_var;
+    else
+        value = ft_getenv(tmp, env);
     if (!value)
-        value = ft_strdup("");
+        value = tmp + ft_strlen(tmp);
     ft_switch_var_value(line, value, i, j);
+    free(tmp);
     return (j + ft_strlen(value) - 1);
 }

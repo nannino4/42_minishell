@@ -24,7 +24,9 @@ void ft_exec_child1(t_data *data, char **path)
     char *command;
 
     ft_set_io(data->list);
-    if (!ft_strchr((data->list->split)[0], '/') && path)
+    if (ft_check_builtin(data->list->split[0]))
+        ft_exec_builtin(data->list->split[0], data);
+    else if (!ft_strchr((data->list->split)[0], '/') && path)
     {
         while (path && *path)
         {
@@ -73,5 +75,7 @@ void ft_exec(t_data *data)
         ft_free_path(path);
     }
     ft_free_list(list);
-    ft_set_var("?", ft_itoa(WEXITSTATUS(wstatus)));
+    free(data->status_var);
+    data->status_var = ft_itoa(WEXITSTATUS(wstatus));
+    exit(WEXITSTATUS(wstatus));
 }

@@ -1,13 +1,5 @@
 #include "minishell.h"
 
-int ft_set_var(char *var, char *value)
-{
-    //TODO
-    var = 0;
-    value = 0;
-    return (0);
-}
-
 char *ft_join_path_and_cmd(char *path, char *command)
 {
     char *tmp;

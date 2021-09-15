@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int ft_input_redir(t_list *head, int i, char **env)
+int ft_input_redir(t_list *head, int i, t_data *data)
 {
 	int file;
 	int j;
@@ -8,7 +8,7 @@ int ft_input_redir(t_list *head, int i, char **env)
 
 	j = i;
 	i++;
-	name = ft_get_name(&(head->line), &i, env, WITH_VARIABLES);
+	name = ft_get_name(&(head->line), &i, data->env, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -29,7 +29,7 @@ int ft_input_redir(t_list *head, int i, char **env)
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-int ft_output_redir(t_list *head, int i, char **env)
+int ft_output_redir(t_list *head, int i, t_data *data)
 {
 	int file;
 	char *name;
@@ -37,7 +37,7 @@ int ft_output_redir(t_list *head, int i, char **env)
 
 	j = i;
 	i++;
-	name = ft_get_name(&(head->line), &i, env, WITH_VARIABLES);
+	name = ft_get_name(&(head->line), &i, data->env, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -53,7 +53,7 @@ int ft_output_redir(t_list *head, int i, char **env)
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-int ft_double_output_redir(t_list *head, int i, char **env)
+int ft_double_output_redir(t_list *head, int i, t_data *data)
 {
 	int file;
 	int j;
@@ -61,7 +61,7 @@ int ft_double_output_redir(t_list *head, int i, char **env)
 
 	j = i;
 	i += 2;
-	name = ft_get_name(&(head->line), &i, env, WITH_VARIABLES);
+	name = ft_get_name(&(head->line), &i, data, WITH_VARIABLES);
 	if (!name || !*name)
 	{
 		//TODO error management: nome file invalido
@@ -117,13 +117,13 @@ int ft_parse_ioredir(t_data *data)
 		{
 			i = ft_skip_quotes(head->line, i);
 			if ((head->line)[i] == '>' && (head->line)[i + 1] == '>')
-				i = ft_double_output_redir(head, i, data->env);
+				i = ft_double_output_redir(head, i, data);
 			else if ((head->line)[i] == '<' && (head->line)[i + 1] == '<')
 				i = ft_double_input_redir(head, i);
 			else if ((head->line)[i] == '<')
-				i = ft_input_redir(head, i, data->env);
+				i = ft_input_redir(head, i, data);
 			else if ((head->line)[i] == '>')
-				i = ft_output_redir(head, i, data->env);
+				i = ft_output_redir(head, i, data);
 			i++;
 		}
 		head = head->next;

@@ -25,7 +25,7 @@ void ft_init_data(t_data *data, char **envp)
     data->env = ft_env_creation(envp);
     data->line = readline("# Orders, my Lord? >: ");
     data->list = 0;
-    data->local_env = 0;
+    data->status_var = ft_strdup("0");
 }
 
 int main(int argc, char **argv, char **envp)
@@ -46,10 +46,7 @@ int main(int argc, char **argv, char **envp)
     {
         pid = fork();
         if (pid == 0)
-        {
             ft_parse_and_execute(&data);
-            exit(0);
-        }
         else
         {
             wait(0);
