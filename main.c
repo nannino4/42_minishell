@@ -23,7 +23,6 @@ void ft_parse_and_execute(t_data *data)
 void ft_init_data(t_data *data, char **envp)
 {
     ft_env_creation(data, envp);
-    data->line = readline("# Orders, my Lord? >: ");
     data->list = 0;
     data->status_var = ft_strdup("0");
     data->exit_flag = 0;
@@ -40,18 +39,17 @@ int main(int argc, char **argv, char **envp)
         exit(127);
     }
     ft_init_data(&data, envp);
-    if (data.line && ft_strlen(data.line) > 0)
-        add_history(data.line);
+    data.line = ft_strdup("");
     while (data.line && !data.exit_flag)
     {
-        ft_parse_and_execute(&data);
         free(data.line);
-        if (data.exit_flag)
-            break;
         data.line = readline("# Orders, my Lord? >: ");
         if (data.line && ft_strlen(data.line) > 0)
             add_history(data.line);
+        ft_parse_and_execute(&data);
     }
+    if (data.line)
+        free(data.line);
     printf("\nexit\n");
     exit(ft_atoi(data.status_var));
 }
