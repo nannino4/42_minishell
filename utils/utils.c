@@ -52,6 +52,11 @@ int	ft_arrlen(char **arr)
 	return (i);
 }
 
+// void ft_increment_shlvl(char **env)
+// {
+
+// }
+
 char **ft_env_creation(char **envp)
 {
 	char **env;
@@ -71,5 +76,6 @@ char **ft_env_creation(char **envp)
 		env[i] = ft_strdup(envp[i]);
 		i++;
 	}
+	// ft_increment_shlvl(env);
 	return (env);
 }

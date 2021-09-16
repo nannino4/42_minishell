@@ -30,21 +30,19 @@ void ft_init_data(t_data *data, char **envp)
     //TODO increment variable SHLVL
 }
 
-//TODO    setta la variabile '_' come ultima stringa dell'ultimo split, ma nell'env deve rimanere /usr/bin/env
-
 int main(int argc, char **argv, char **envp)
 {
     t_data data;
 
-    if (argc > 1)
+    if (argc > 1 && argv)
     {
         //TODO error: too many arguments
+        exit(127);
     }
-    argv = 0;
     ft_init_data(&data, envp);
     if (data.line && ft_strlen(data.line) > 0)
         add_history(data.line);
-    while (data.line)
+    while (data.line && !data.exit_flag)
     {
         ft_parse_and_execute(&data);
         free(data.line);

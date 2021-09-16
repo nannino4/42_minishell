@@ -40,29 +40,6 @@ void ft_add_var(char *var, t_data *data)
     data->env = new_env;
 }
 
-void ft_replace_var(char *name, char *var, char **env)
-{
-    int i;
-    int j;
-    char *tmp;
-
-    i = 0;
-    while (env[i])
-    {
-		j = 0;
-		while (env[i][j] && env[i][j] != '=')
-			j++;
-		if (!ft_strncmp(name, env[i], j) && j == ft_strlen(name))
-		{
-            tmp = ft_strdup(var);
-            free(env[i]);
-            env[i] = tmp;
-            return ;
-        }
-        i++;
-    }
-}
-
 int ft_len_var(char *var)
 {
     int i;
@@ -73,7 +50,28 @@ int ft_len_var(char *var)
     return (i);
 }
 
-void ft_export(t_data *data)
+void ft_replace_var(char *name, char *var, char **env)
+{
+    int i;
+    int j;
+    char *tmp;
+
+    i = 0;
+    while (env[i])
+    {
+        j = ft_len_var(env[i]);
+        if (!ft_strncmp(name, env[i], j) && j == ft_strlen(name))
+        {
+            tmp = ft_strdup(var);
+            free(env[i]);
+            env[i] = tmp;
+            return;
+        }
+        i++;
+    }
+}
+
+int ft_export(t_data *data)
 {
     int i;
     int ret;
@@ -99,5 +97,5 @@ void ft_export(t_data *data)
             ret = 1;
         i++;
     }
-    exit(ret);
+    return (ret);
 }
