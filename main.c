@@ -22,7 +22,7 @@ void ft_parse_and_execute(t_data *data)
 
 void ft_init_data(t_data *data, char **envp)
 {
-    data->env = ft_env_creation(envp);
+    ft_env_creation(data, envp);
     data->line = readline("# Orders, my Lord? >: ");
     data->list = 0;
     data->status_var = ft_strdup("0");

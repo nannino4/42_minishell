@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/wait.h>
+#include <sys/param.h>
 #include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -39,7 +40,7 @@ int ft_isspace(char c);
 int ft_isquotes(char c);
 
 int ft_skip_spaces(char *line, int i);
-char **ft_env_creation(char **envp);
+void ft_env_creation(t_data *data, char **envp);
 char *ft_getenv(char *var, char **env);
 int ft_arrlen(char **arr);
 
@@ -60,8 +61,10 @@ void ft_exec_builtin(char *command, t_data *data);
 int ft_unset(t_data *data);
 int ft_exit(t_data *data);
 int ft_export(t_data *data);
+void ft_pwd(void);
 void ft_echo(t_data *data);
 void ft_env(t_data *data);
+int ft_cd(t_data *data);
 
 /* parsing */
 

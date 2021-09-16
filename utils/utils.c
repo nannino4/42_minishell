@@ -4,10 +4,10 @@ void ft_add_elem(t_data *data, t_list *elem)
 {
 	t_list *list;
 
-    if (!(data->list))
+	if (!(data->list))
 	{
 		data->list = elem;
-		return ;
+		return;
 	}
 	list = data->list;
 	while (list->next)
@@ -40,7 +40,7 @@ char *ft_getenv(char *var, char **env)
 	return (0);
 }
 
-int	ft_arrlen(char **arr)
+int ft_arrlen(char **arr)
 {
 	int i;
 
@@ -52,12 +52,32 @@ int	ft_arrlen(char **arr)
 	return (i);
 }
 
-// void ft_increment_shlvl(char **env)
-// {
+void ft_increment_shlvl(t_data *data)
+{
+	int shlvl;
+	char *var;
+	char *tmp;
 
-// }
+	if (ft_getenv("SHLVL", data->env))
+	{
+		shlvl = ft_atoi(ft_getenv("SHLVL", data->env));
+		shlvl++;
+		tmp = ft_itoa(shlvl);
+		var = ft_strjoin("SHLVL=", tmp);
+		ft_replace_var("SHLVL", var, data->env);
+	}
+	else
+	{
+		shlvl = 1;
+		tmp = ft_itoa(shlvl);
+		var = ft_strjoin("SHLVL=", tmp);
+		ft_add_var(var, data);
+	}
+	free(tmp);
+	free(var);
+}
 
-char **ft_env_creation(char **envp)
+void ft_env_creation(t_data *data, char **envp)
 {
 	char **env;
 	int strings;
@@ -76,6 +96,6 @@ char **ft_env_creation(char **envp)
 		env[i] = ft_strdup(envp[i]);
 		i++;
 	}
-	// ft_increment_shlvl(env);
-	return (env);
+	data->env = env;
+	ft_increment_shlvl(data);
 }

@@ -2,11 +2,13 @@ NAME		= minishell
 
 SRCS		=	\
 				exec/builtin.c \
+				exec/cd.c \
 				exec/echo.c \
 				exec/env.c \
 				exec/exec.c \
 				exec/exit.c \
 				exec/export.c \
+				exec/pwd.c \
 				exec/unset.c \
 				exec/utils.c \
 				parsing/final_parse.c \
