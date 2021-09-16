@@ -11,14 +11,18 @@ int ft_exit(t_data *data)
     }
     i = 0;
     data->exit_flag = 1;
-    while (data->list->split[1][i])
+    if (ft_arrlen(data->list->split) == 2)
     {
-        if (!ft_isdigit(data->list->split[1][i]))
+        while (data->list->split[1][i])
         {
-            //TODO error: exit: numeric argument required
-            return (255);
+            if (!ft_isdigit(data->list->split[1][i]))
+            {
+                //TODO error: exit: numeric argument required
+                return (255);
+            }
+            i++;
         }
-        i++;
+        return (ft_atoi(data->list->split[1]));
     }
-    return (ft_atoi(data->list->split[1]));
+    return (0);
 }

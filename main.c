@@ -2,31 +2,35 @@
 
 void ft_parse_and_execute(t_data *data)
 {
-    if (*(data->line))
+    if (ft_parse_pipes(data))
     {
-        if (ft_parse_pipes(data))
-        {
-            //TODO error: pipes error
-        }
-        if (ft_parse_ioredir(data))
-        {
-            //TODO error: ioredir error
-        }
-        if (ft_final_parse(data))
-        {
-            //TODO error: final parse error
-        }
-        ft_exec(data);
+        //TODO error: pipes error
     }
+    if (ft_parse_ioredir(data))
+    {
+        //TODO error: ioredir error
+    }
+    if (ft_final_parse(data))
+    {
+        //TODO error: final parse error
+    }
+    ft_exec(data);
 }
 
-void ft_init_data(t_data *data, char **envp)
+void ft_sigint(int sig)
 {
+    ft_putstr_fd("\n", 0);
+    sig = 0;
+}
+
+void ft_init(t_data *data, char **envp)
+{
+    signal(SIGINT, ft_sigint);
     ft_env_creation(data, envp);
+    data->line = ft_strdup("");
     data->list = 0;
     data->status_var = ft_strdup("0");
     data->exit_flag = 0;
-    //TODO increment variable SHLVL
 }
 
 int main(int argc, char **argv, char **envp)
@@ -38,18 +42,19 @@ int main(int argc, char **argv, char **envp)
         //TODO error: too many arguments
         exit(127);
     }
-    ft_init_data(&data, envp);
-    data.line = ft_strdup("");
+    ft_init(&data, envp);
     while (data.line && !data.exit_flag)
     {
         free(data.line);
         data.line = readline("# Orders, my Lord? >: ");
-        if (data.line && ft_strlen(data.line) > 0)
+        if (data.line && *(data.line) > 0)
+        {
             add_history(data.line);
-        ft_parse_and_execute(&data);
+            ft_parse_and_execute(&data);
+        }
     }
     if (data.line)
         free(data.line);
-    printf("\nexit\n");
+    printf("exit\n");
     exit(ft_atoi(data.status_var));
 }
