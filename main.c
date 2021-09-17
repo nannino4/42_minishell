@@ -17,15 +17,10 @@ void ft_parse_and_execute(t_data *data)
     ft_exec(data);
 }
 
-void ft_sigint(int sig)
-{
-    ft_putstr_fd("\n", 0);
-    sig = 0;
-}
-
 void ft_init(t_data *data, char **envp)
 {
-    signal(SIGINT, ft_sigint);
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
     ft_env_creation(data, envp);
     data->line = ft_strdup("");
     data->list = 0;
@@ -33,9 +28,48 @@ void ft_init(t_data *data, char **envp)
     data->exit_flag = 0;
 }
 
+void ft_read(t_data data)
+{
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_IGN);
+    data.line = readline("# Orders, my Lord? >: ");
+    if (data.line)
+    {
+        if (!*(data.line))
+            ft_putstr_fd("\n", data.fd[WRITE_END]);
+        else
+            ft_putstr_fd(data.line, data.fd[WRITE_END]);
+        free(data.line);
+    }
+    exit(0);
+}
+
+void ft_start(t_data *data)
+{
+    wait(&data->wstatus);
+    if (WIFSIGNALED(data->wstatus) && WTERMSIG(data->wstatus) == SIGINT)
+    {
+        ft_putstr_fd("\n", data->fd[WRITE_END]);
+        printf("\n");
+    }
+    if (WIFSIGNALED(data->wstatus) && WTERMSIG(data->wstatus) == SIGQUIT)
+    {
+        printf("ft_read e' stata uccisa da SIGQUIT\n");
+    }
+    close(data->fd[WRITE_END]);
+    data->line = ft_getstr_fd(data->fd[READ_END]);
+    close(data->fd[READ_END]);
+    if (data->line && *(data->line) > 0)
+    {
+        add_history(data->line);
+        ft_parse_and_execute(data);
+    }
+}
+
 int main(int argc, char **argv, char **envp)
 {
     t_data data;
+    // struct termios mio;
 
     if (argc > 1 && argv)
     {
@@ -43,15 +77,19 @@ int main(int argc, char **argv, char **envp)
         exit(127);
     }
     ft_init(&data, envp);
+    // tcgetattr(STDIN_FILENO, &mio);
+    // mio.c_lflag &= ~(ISIG | ICANON | ECHO);
+    // (mio.c_cc)[VQUIT] = _POSIX_VDISABLE;
+    // tcsetattr(STDIN_FILENO, TCSANOW, &mio);
     while (data.line && !data.exit_flag)
     {
         free(data.line);
-        data.line = readline("# Orders, my Lord? >: ");
-        if (data.line && *(data.line) > 0)
-        {
-            add_history(data.line);
-            ft_parse_and_execute(&data);
-        }
+        pipe(data.fd);
+        data.pid = fork();
+        if (data.pid == 0)
+            ft_read(data);
+        else
+            ft_start(&data);
     }
     if (data.line)
         free(data.line);

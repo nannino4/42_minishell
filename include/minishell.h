@@ -1,18 +1,22 @@
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/wait.h>
-#include <sys/param.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft.h"
-#include "color.h"
+# include <unistd.h>
+# include <signal.h>
+# include <stdio.h>
+# include <sys/wait.h>
+# include <sys/param.h>
+# include <fcntl.h>
+# include <termios.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libft.h"
+# include "color.h"
 
-#define WITH_VARIABLES 1
-#define NO_VARIABLES 0
+# define WITH_VARIABLES 1
+# define NO_VARIABLES 0
+# define READ_END 0
+# define WRITE_END 1
 
 typedef struct s_list
 {
@@ -31,6 +35,9 @@ typedef struct s_data
     char **env;
     char *status_var;
     int exit_flag;
+    int wstatus;
+    int pid;
+    int fd[2];
 } t_data;
 
 /* utils */
@@ -43,6 +50,8 @@ int ft_skip_spaces(char *line, int i);
 void ft_env_creation(t_data *data, char **envp);
 char *ft_getenv(char *var, char **env);
 int ft_arrlen(char **arr);
+
+char *ft_getstr_fd(int fd);
 
 /* exec */
 

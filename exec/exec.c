@@ -23,6 +23,8 @@ void ft_exec_child1(t_data *data, char **path)
     int pid;
     char *command;
 
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
     ft_set_io(data->list);
     if (ft_check_builtin(data->list->split[0]))
         ft_exec_builtin(data->list->split[0], data);
@@ -49,7 +51,9 @@ int ft_exec_parent1(int pid, char *command)
     int wstatus;
 
     waitpid(pid, &wstatus, 0);
-    if (WEXITSTATUS(wstatus) == 127)
+    if (WIFSIGNALED(wstatus) && (WTERMSIG(wstatus) == SIGINT || WTERMSIG(wstatus) == SIGQUIT))
+        printf("\n");
+    if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 127)
         printf(HYEL "I apologize my Lord, I could not find your command: " BHBLU "%s\n" RESET, command);
     return (WEXITSTATUS(wstatus));
 }

@@ -18,7 +18,8 @@ void	ft_echo(t_data *data)
 		while(argv[i])
 		{
 			printf("%s", argv[i]);
-			i++;
+			if (argv[++i])
+				printf(" ");
 		}
 		if (!rmv_n)
 			printf("\n");
