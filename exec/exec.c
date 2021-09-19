@@ -1,26 +1,26 @@
 #include "minishell.h"
 
-void ft_exec_child2(char *command, char **argv, char **env)
-{
-    execve(command, argv, env);
-    exit(127);
-}
+// void ft_exec_child2(char *command, char **argv, char **env)
+// {
+//     execve(command, argv, env);
+//     exit(127);
+// }
 
-void ft_exec_parent2(int pid, char *command)
-{
-    int wstatus;
+// void ft_exec_parent2(int pid, char *command)
+// {
+//     int wstatus;
 
-    waitpid(pid, &wstatus, 0);
-    free(command);
-    if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 127)
-    {
-        exit(WEXITSTATUS(wstatus));
-    }
-}
+//     waitpid(pid, &wstatus, 0);
+//     free(command);
+//     if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 127)
+//     {
+//         exit(WEXITSTATUS(wstatus));
+//     }
+// }
 
 void ft_exec_child1(t_data *data, char **path)
 {
-    int pid;
+    // int pid;
     char *command;
 
     signal(SIGINT, SIG_DFL);
@@ -33,11 +33,12 @@ void ft_exec_child1(t_data *data, char **path)
         while (path && *path)
         {
             command = ft_join_path_and_cmd(*path, data->list->split[0]);
-            pid = fork();
-            if (pid == 0)
-                ft_exec_child2(command, data->list->split, data->env);
-            else
-                ft_exec_parent2(pid, command);
+            execve(command, data->list->split, data->env);
+            // pid = fork();
+            // if (pid == 0)
+            // ft_exec_child2(command, data->list->split, data->env);
+            // else
+            // ft_exec_parent2(pid, command);
             path++;
         }
     }
