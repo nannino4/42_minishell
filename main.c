@@ -7,21 +7,20 @@ void sigquit_handler()
     ft_putstr_fd("  \b\b", 1);
 }
 
-void ft_parse_and_execute(t_data *data)
+int ft_parse_and_execute(t_data *data)
 {
-    if (ft_parse_pipes(data))
-    {
-        //TODO error: pipes error
-    }
-    if (ft_parse_ioredir(data))
-    {
-        //TODO error: ioredir error
-    }
-    if (ft_final_parse(data))
-    {
-        //TODO error: final parse error
-    }
-    ft_exec(data);
+    int ret;
+
+    ret = ft_parse_pipes(data);
+    if (ret)
+        return (ret);
+    ret = ft_parse_ioredir(data);
+    if (ret)
+        return (ret);
+    ret = ft_final_parse(data);
+    if (ret)
+        return (ret);
+    return (ft_exec(data));
 }
 
 void ft_init(t_data *data, char **envp)
@@ -54,14 +53,10 @@ void ft_read(t_data data)
 void ft_start(t_data *data)
 {
     wait(&data->wstatus);
-    if (WIFSIGNALED(data->wstatus) && WTERMSIG(data->wstatus) == SIGINT)
+    if (WIFSIGNALED(data->wstatus) && (WTERMSIG(data->wstatus) == SIGINT || WTERMSIG(data->wstatus) == SIGQUIT))
     {
         ft_putstr_fd("\n", data->fd[WRITE_END]);
         printf("\n");
-    }
-    if (WIFSIGNALED(data->wstatus) && WTERMSIG(data->wstatus) == SIGQUIT)
-    {
-        printf("ft_read e' stata uccisa da SIGQUIT\n");
     }
     close(data->fd[WRITE_END]);
     data->line = ft_getstr_fd(data->fd[READ_END]);
@@ -69,7 +64,8 @@ void ft_start(t_data *data)
     if (data->line && *(data->line) > 0)
     {
         add_history(data->line);
-        ft_parse_and_execute(data);
+        free(data->status_var);
+        data->status_var = ft_itoa(ft_parse_and_execute(data));
     }
 }
 
@@ -78,16 +74,16 @@ int main(int argc, char **argv, char **envp)
     t_data data;
 
     if (argc > 1 && argv)
-    {
-        //TODO error: too many arguments
-        exit(127);
-    }
+        ft_error_exit(127, "./minishell: too many arguments");
     ft_init(&data, envp);
     while (data.line && !data.exit_flag)
     {
         free(data.line);
-        pipe(data.fd);
+        if (pipe(data.fd))
+            ft_error_exit(1, "cannot read: pipe creation failed");
         data.pid = fork();
+        if (data.pid == -1)
+            ft_error_exit(1, "cannot read: fork failed");
         if (data.pid == 0)
             ft_read(data);
         else

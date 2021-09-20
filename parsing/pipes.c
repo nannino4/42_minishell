@@ -15,10 +15,7 @@ void ft_cut_pipe(t_data *data, char **line, int i)
 	ft_add_elem(data, elem);
 	if (elem->previous)
 	{
-		if (pipe(fd))
-		{
-			//TODO error: pipe creation
-		}
+		pipe(fd);									//TODO devi fare errore e free
 		elem->fd_in = fd[0];
 		elem->previous->fd_out = fd[1];
 	}
@@ -45,9 +42,7 @@ int ft_parse_pipes(t_data *data)
 		else if (line[i] == '|')
 		{
 			if (!word_flag)
-			{
-				// TODO error: unexpected '|'
-			}
+				return (ft_error(258, "unexpected '|'"));		//TODO devi fare free
 			word_flag = 0;
 			ft_cut_pipe(data, &line, i);
 			i = -1;
@@ -55,9 +50,7 @@ int ft_parse_pipes(t_data *data)
 		i++;
 	}
 	if (!word_flag)
-	{
-		// TODO error: line ending with unexpected '|'
-	}
+		ft_error(258, "line ending with unexpected '|'");		//TODO devi fare free
 	ft_cut_pipe(data, &line, i);
 	return (0);
 }
