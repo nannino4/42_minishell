@@ -16,7 +16,7 @@ int ft_check_special_builtin(char *command)
 int ft_exec_special_builtin(char *command, t_data *data)
 {
     if (!ft_strncmp(command, "cd", ft_strlen(command)) && ft_strlen(command) == ft_strlen("cd"))
-        return(ft_cd(data));
+        return (ft_cd(data));
     else if (!ft_strncmp(command, "export", ft_strlen(command)) && ft_strlen(command) == ft_strlen("export"))
         return (ft_export(data));
     else if (!ft_strncmp(command, "unset", ft_strlen(command)) && ft_strlen(command) == ft_strlen("unset"))

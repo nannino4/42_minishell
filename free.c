@@ -19,14 +19,18 @@ void ft_free_list(t_list *list)
     while (list)
     {
         tmp_split = list->split;
-        while (*(list->split))
+        if (tmp_split)
         {
-            tmp_line = *(list->split);
-            (list->split)++;
-            free(tmp_line);
+            while (*(list->split))
+            {
+                tmp_line = *(list->split);
+                (list->split)++;
+                free(tmp_line);
+            }
+            free(tmp_split);
         }
-        free(tmp_split);
-        free(list->line);
+        if (list->line)
+            free(list->line);
         tmp_list = list;
         list = list->next;
         free(tmp_list);

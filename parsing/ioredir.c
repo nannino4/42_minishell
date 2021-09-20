@@ -21,11 +21,6 @@ int ft_input_redir(t_list *head, int i, t_data *data)
 	if (head->fd_in != -1)
 		close(head->fd_in);
 	head->fd_in = file;
-	// if (dup2(file, STDIN_FILENO) == -1)
-	// {
-	// 	//TODO error: dup2 failed
-	// }
-	// close(file);
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
@@ -96,11 +91,6 @@ int ft_double_input_redir(t_list *head, int i)
 	if (head->fd_in != -1)
 		close(head->fd_in);
 	head->fd_in = fd[0];
-	// if (dup2(fd[0], STDIN_FILENO) == -1)
-	// {
-	// 	//TODO error: dup2 failed
-	// }
-	// close(fd[0]);
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
