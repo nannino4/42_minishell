@@ -25,19 +25,26 @@ SRCS		=	\
 
 OBJS		= $(SRCS:.c=.o)
 
+HOMEBREW	= ./homebrew/opt/readline/lib
+
 CFLAGS		= -Wall -Wextra -Werror
 
 %.o :		%.c
-			gcc -c -g -I./include -I./libft $(CFLAGS) $< -o $@
-
-$(NAME):	$(OBJS)
-			make -C libft
-			mv libft/libft.a .
-			gcc $(OBJS) libft.a -o $(NAME) -lreadline
+			gcc -c -g -I./include -I./libft -I ./homebrew/opt/readline/include $(CFLAGS) $< -o $@
 
 all:		$(NAME)
 
+$(NAME):	$(OBJS) $(HOMEBREW)
+			make -C libft
+			mv libft/libft.a .
+			gcc $(OBJS) libft.a -o $(NAME) -lreadline -L ./homebrew/opt/readline/lib
+
+$(HOMEBREW):
+			mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+			./homebrew/bin/brew install readline
+
 clean:
+			rm -rf homebrew
 			rm -f $(OBJS)
 			make -C libft clean
 

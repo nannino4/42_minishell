@@ -6,7 +6,7 @@ int ft_exit(t_data *data)
 
     if (ft_arrlen(data->list->split) > 2)
     {
-        //TODO error: exit: too many arguments
+        printf("exit: too many arguments\n");
         return (1);
     }
     i = 0;
@@ -17,7 +17,7 @@ int ft_exit(t_data *data)
         {
             if (!ft_isdigit(data->list->split[1][i]))
             {
-                //TODO error: exit: numeric argument required
+                printf("exit: %s: numeric argument required\n", data->list->split[1]);
                 return (255);
             }
             i++;

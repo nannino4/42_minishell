@@ -7,7 +7,7 @@ void ft_pwd(void)
 	pwd = getcwd(0, 0);
 	if (!pwd)
 	{
-		//TODO error: pwd
+		perror("pwd: Error: ");
 		exit(1);
 	}
 	printf("%s\n", pwd);

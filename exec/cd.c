@@ -11,7 +11,7 @@ int ft_cd(t_data *data)
 	free(tmp);
 	if (chdir(data->list->split[1]))
 	{
-		//TODO error: cd
+		printf("cd: %s: %s\n", data->list->split[1], strerror(errno));
 	}
 	tmp = getcwd(0, 0);
 	pwd = ft_strjoin("PWD=", tmp);

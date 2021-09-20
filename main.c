@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+void sigquit_handler()
+{
+    rl_on_new_line();
+    rl_redisplay();
+    ft_putstr_fd("  \b\b", 1);
+}
+
 void ft_parse_and_execute(t_data *data)
 {
     if (ft_parse_pipes(data))
@@ -31,7 +38,7 @@ void ft_init(t_data *data, char **envp)
 void ft_read(t_data data)
 {
     signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_IGN);
+    signal(SIGQUIT, sigquit_handler);
     data.line = readline("# Orders, my Lord? >: ");
     if (data.line)
     {
@@ -69,7 +76,6 @@ void ft_start(t_data *data)
 int main(int argc, char **argv, char **envp)
 {
     t_data data;
-    // struct termios mio;
 
     if (argc > 1 && argv)
     {
@@ -77,10 +83,6 @@ int main(int argc, char **argv, char **envp)
         exit(127);
     }
     ft_init(&data, envp);
-    // tcgetattr(STDIN_FILENO, &mio);
-    // mio.c_lflag &= ~(ISIG | ICANON | ECHO);
-    // (mio.c_cc)[VQUIT] = _POSIX_VDISABLE;
-    // tcsetattr(STDIN_FILENO, TCSANOW, &mio);
     while (data.line && !data.exit_flag)
     {
         free(data.line);

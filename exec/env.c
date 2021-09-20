@@ -9,7 +9,7 @@ void ft_env(t_data *data)
         i++;
     if (i > 1)
     {
-        //TODO error: too many arguments for the command 'env'
+        printf("env: Too many arguments\n");
         exit(1);
     }
     i = 0;
