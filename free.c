@@ -18,6 +18,7 @@ void ft_free_list(t_list *list)
 
     while (list)
     {
+        ft_close_fd(list);
         tmp_split = list->split;
         if (tmp_split)
         {
@@ -49,4 +50,13 @@ void ft_free_arr(char **arr)
     }
     if (tmp)
         free(tmp);
+}
+
+void ft_free_data(t_data data)
+{
+    if (data.line)
+        free(data.line);
+    ft_free_arr(data.env);
+    ft_free_list(data.list);
+    free(data.status_var);
 }

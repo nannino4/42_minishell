@@ -85,10 +85,6 @@ void ft_env_creation(t_data *data, char **envp)
 
 	strings = ft_arrlen(envp);
 	env = malloc((strings + 1) * sizeof(void *));
-	if (!env)
-	{
-		// TODO error management: allocation failed
-	}
 	env[strings] = 0;
 	i = 0;
 	while (i < strings)

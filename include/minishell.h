@@ -35,9 +35,6 @@ typedef struct s_data
     char **env;
     char *status_var;
     int exit_flag;
-    int wstatus;
-    int pid;
-    int fd[2];
 } t_data;
 
 /* utils */
@@ -50,8 +47,6 @@ int ft_skip_spaces(char *line, int i);
 void ft_env_creation(t_data *data, char **envp);
 char *ft_getenv(char *var, char **env);
 int ft_arrlen(char **arr);
-
-char *ft_getstr_fd(int fd);
 
 /* exec */
 
@@ -95,10 +90,12 @@ int ft_cut_line_io_redir(char **line, int i, int j);
 /* free */
 
 void ft_close_fd(t_list *list);
-void ft_free_arr(char **path);
+void ft_free_arr(char **arr);
 void ft_free_list(t_list *list);
+void ft_free_data(t_data data);
 
 void ft_error_exit(int n, char *str);
 int ft_error(int n, char *str);
+int ft_error_and_free(int n, char *str, t_data *data);
 
 #endif
