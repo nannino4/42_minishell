@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-int ft_cd(t_data *data)
+int	ft_cd(t_data *data)
 {
-	char *old_pwd;
-	char *pwd;
-	char *tmp;
+	char	*old_pwd;
+	char	*pwd;
+	char	*tmp;
 
 	tmp = getcwd(0, 0);
 	old_pwd = ft_strjoin("OLDPWD=", tmp);

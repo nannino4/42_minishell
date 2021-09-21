@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-void ft_add_elem(t_data *data, t_list *elem)
+void	ft_add_elem(t_data *data, t_list *elem)
 {
-	t_list *list;
+	t_list	*list;
 
 	if (!(data->list))
 	{
 		data->list = elem;
-		return;
+		return ;
 	}
 	list = data->list;
 	while (list->next)
@@ -16,11 +16,11 @@ void ft_add_elem(t_data *data, t_list *elem)
 	elem->previous = list;
 }
 
-char *ft_getenv(char *var, char **env)
+char	*ft_getenv(char *var, char **env)
 {
-	char *value;
-	int i;
-	int j;
+	char	*value;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (env[i])
@@ -40,9 +40,9 @@ char *ft_getenv(char *var, char **env)
 	return (0);
 }
 
-int ft_arrlen(char **arr)
+int	ft_arrlen(char **arr)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (arr[i])
@@ -52,11 +52,11 @@ int ft_arrlen(char **arr)
 	return (i);
 }
 
-void ft_increment_shlvl(t_data *data)
+void	ft_increment_shlvl(t_data *data)
 {
-	int shlvl;
-	char *var;
-	char *tmp;
+	int		shlvl;
+	char	*var;
+	char	*tmp;
 
 	if (ft_getenv("SHLVL", data->env))
 	{
@@ -77,11 +77,11 @@ void ft_increment_shlvl(t_data *data)
 	free(var);
 }
 
-void ft_env_creation(t_data *data, char **envp)
+void	ft_env_creation(t_data *data, char **envp)
 {
-	char **env;
-	int strings;
-	int i;
+	char	**env;
+	int		strings;
+	int		i;
 
 	strings = ft_arrlen(envp);
 	env = malloc((strings + 1) * sizeof(void *));

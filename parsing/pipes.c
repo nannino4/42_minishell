@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-int ft_cut_pipe(t_data *data, char **line, int i)
+int	ft_cut_pipe(t_data *data, char **line, int i)
 {
-	t_list *elem;
-	int fd[2];
+	t_list	*elem;
+	int		fd[2];
 
 	elem = malloc(sizeof(t_list));
 	elem->line = ft_substr(*line, 0, i);
@@ -27,11 +27,18 @@ int ft_cut_pipe(t_data *data, char **line, int i)
 	return (0);
 }
 
-int ft_parse_pipes(t_data *data)
+int	ft_return_pipes(int word_flag, t_data *data, char *line, int i)
 {
-	int word_flag;
-	int i;
-	char *line;
+	if (!word_flag)
+		return (ft_error(258, "line ending with unexpected '|'"));
+	return (ft_cut_pipe(data, &line, i));
+}
+
+int	ft_parse_pipes(t_data *data)
+{
+	int		word_flag;
+	int		i;
+	char	*line;
 
 	word_flag = 0;
 	i = 0;
@@ -52,7 +59,5 @@ int ft_parse_pipes(t_data *data)
 		}
 		i++;
 	}
-	if (!word_flag)
-		return (ft_error(258, "line ending with unexpected '|'"));
-	return (ft_cut_pipe(data, &line, i));
+	return (ft_return_pipes(word_flag, data, line, i));
 }

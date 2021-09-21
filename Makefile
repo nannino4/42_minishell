@@ -16,6 +16,7 @@ SRCS		=	\
 				parsing/pipes.c \
 				parsing/quotes_and_variables.c \
 				parsing/utils.c \
+				parsing/utils2.c \
 				utils/utils.c \
 				utils/utils2.c \
 				error.c \

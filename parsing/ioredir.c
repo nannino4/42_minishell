@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-int ft_input_redir(t_list *head, int i, t_data *data)
+int	ft_input_redir(t_list *head, int i, t_data *data)
 {
-	int file;
-	int j;
-	char *name;
+	int		file;
+	int		j;
+	char	*name;
 
 	j = i;
 	i++;
@@ -20,11 +20,11 @@ int ft_input_redir(t_list *head, int i, t_data *data)
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-int ft_output_redir(t_list *head, int i, t_data *data)
+int	ft_output_redir(t_list *head, int i, t_data *data)
 {
-	int file;
-	char *name;
-	int j;
+	int		file;
+	char	*name;
+	int		j;
 
 	j = i;
 	i++;
@@ -40,11 +40,11 @@ int ft_output_redir(t_list *head, int i, t_data *data)
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-int ft_double_output_redir(t_list *head, int i, t_data *data)
+int	ft_double_output_redir(t_list *head, int i, t_data *data)
 {
-	int file;
-	int j;
-	char *name;
+	int		file;
+	int		j;
+	char	*name;
 
 	j = i;
 	i += 2;
@@ -60,11 +60,11 @@ int ft_double_output_redir(t_list *head, int i, t_data *data)
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-int ft_double_input_redir(t_list *head, int i)
+int	ft_double_input_redir(t_list *head, int i)
 {
-	char *end_word;
-	int j;
-	int fd[2];
+	char	*end_word;
+	int		j;
+	int		fd[2];
 
 	j = i;
 	i += 2;
@@ -82,10 +82,10 @@ int ft_double_input_redir(t_list *head, int i)
 	return (ft_cut_line_io_redir(&(head->line), i, j));
 }
 
-int ft_parse_ioredir(t_data *data)
+int	ft_parse_ioredir(t_data *data)
 {
-	t_list *head;
-	int i;
+	t_list	*head;
+	int		i;
 
 	head = data->list;
 	i = 0;
@@ -107,7 +107,5 @@ int ft_parse_ioredir(t_data *data)
 		}
 		head = head->next;
 	}
-	if (i < 0)
-		return (258);
-	return (0);
+	return (ft_get_io_return(i));
 }
