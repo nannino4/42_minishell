@@ -10,6 +10,7 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <errno.h>
 # include "libft.h"
 # include "color.h"
 
@@ -91,8 +92,8 @@ int ft_cut_line_io_redir(char **line, int i, int j);
 
 void ft_close_fd(t_list *list);
 void ft_free_arr(char **arr);
-void ft_free_list(t_list *list);
-void ft_free_data(t_data data);
+void ft_free_list(t_data *data);
+void ft_free_data(t_data *data);
 
 void ft_error_exit(int n, char *str);
 int ft_error(int n, char *str);

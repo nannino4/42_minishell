@@ -53,6 +53,6 @@ int ft_parse_pipes(t_data *data)
 		i++;
 	}
 	if (!word_flag)
-		ft_error(258, "line ending with unexpected '|'");
+		return (ft_error(258, "line ending with unexpected '|'"));
 	return (ft_cut_pipe(data, &line, i));
 }
