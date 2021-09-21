@@ -48,7 +48,7 @@ int ft_len_var(char *var)
 
 void ft_set_ret_to_1(int *ret, char *arg)
 {
-    printf("unset: `%s': not a valid identifier\n", arg);
+    printf("export: `%s': not a valid identifier\n", arg);
     *ret = 1;
 }
 
