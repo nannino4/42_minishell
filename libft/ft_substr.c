@@ -6,7 +6,7 @@
 /*   By: jfabi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 10:50:55 by jfabi             #+#    #+#             */
-/*   Updated: 2021/01/26 15:28:41 by jfabi            ###   ########.fr       */
+/*   Updated: 2021/09/21 15:21:44 by gcefalo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*ft_substr(char const *s, int start, int len)
 {
 	char	*ret;
-	int	i;
+	int		i;
 
 	if (s == 0)
 		return (0);

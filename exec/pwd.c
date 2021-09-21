@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void ft_pwd(void)
+void	ft_pwd(void)
 {
-	char *pwd;
+	char	*pwd;
 
 	pwd = getcwd(0, 0);
 	if (!pwd)

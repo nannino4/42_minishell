@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-char *ft_get_name(char **line, int *i, t_data *data, int flag)
+char	*ft_get_name(char **line, int *i, t_data *data, int flag)
 {
-	int start;
-	int is_valid;
+	int		start;
+	int		is_valid;
 
 	is_valid = 0;
 	*i = ft_skip_spaces(*line, *i);
@@ -24,7 +24,7 @@ char *ft_get_name(char **line, int *i, t_data *data, int flag)
 	return (ft_substr(*line, start, *i - start));
 }
 
-int ft_isquotes(char c)
+int	ft_isquotes(char c)
 {
 	if (c == '\'' || c == '\"')
 		return (1);
@@ -47,7 +47,8 @@ int	ft_skip_spaces(char *line, int i)
 
 int	ft_istoken(char c)
 {
-	if (c == '~' || c == '#' || c == '&' || c == '*' || c == '\\' || c == '<' || c == '>' || c == '/' || c == '|')
+	if (c == '~' || c == '#' || c == '&' || c == '*' || c == '\\' || c == '<' \
+			|| c == '>' || c == '/' || c == '|')
 	{
 		return (1);
 	}
