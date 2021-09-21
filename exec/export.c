@@ -24,10 +24,6 @@ void ft_add_var(char *var, t_data *data)
 
     strings = ft_arrlen(data->env) + 1;
     new_env = malloc((strings + 1) * sizeof(void *));
-    if (!new_env)
-    {
-        // TODO error management: allocation failed
-    }
     new_env[strings] = 0;
     i = 0;
     while (i < strings - 1)
@@ -50,25 +46,10 @@ int ft_len_var(char *var)
     return (i);
 }
 
-void ft_replace_var(char *name, char *var, char **env)
+void ft_set_ret_to_1(int *ret, char *arg)
 {
-    int i;
-    int j;
-    char *tmp;
-
-    i = 0;
-    while (env[i])
-    {
-        j = ft_len_var(env[i]);
-        if (!ft_strncmp(name, env[i], j) && j == ft_strlen(name))
-        {
-            tmp = ft_strdup(var);
-            free(env[i]);
-            env[i] = tmp;
-            return;
-        }
-        i++;
-    }
+    printf("unset: `%s': not a valid identifier\n", arg);
+    *ret = 1;
 }
 
 int ft_export(t_data *data)
@@ -94,7 +75,7 @@ int ft_export(t_data *data)
             }
         }
         else
-            ret = 1;
+            ft_set_ret_to_1(&ret, data->list->split[i]);
         i++;
     }
     return (ret);

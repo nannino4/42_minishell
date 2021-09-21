@@ -1,5 +1,26 @@
 #include "minishell.h"
 
+void ft_replace_var(char *name, char *var, char **env)
+{
+    int i;
+    int j;
+    char *tmp;
+
+    i = 0;
+    while (env[i])
+    {
+        j = ft_len_var(env[i]);
+        if (!ft_strncmp(name, env[i], j) && j == ft_strlen(name))
+        {
+            tmp = ft_strdup(var);
+            free(env[i]);
+            env[i] = tmp;
+            return;
+        }
+        i++;
+    }
+}
+
 void ft_set_var(char *name, char *value, t_data *data)
 {
     char *var;
