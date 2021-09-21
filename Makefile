@@ -18,7 +18,6 @@ SRCS		=	\
 				parsing/utils.c \
 				utils/utils.c \
 				utils/utils2.c \
-				utils/utils3.c \
 				error.c \
 				free.c \
 				main.c

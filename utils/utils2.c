@@ -3,11 +3,14 @@
 char *ft_get_name(char **line, int *i, t_data *data, int flag)
 {
 	int start;
+	int is_valid;
 
+	is_valid = 0;
 	*i = ft_skip_spaces(*line, *i);
 	start = *i;
 	while ((*line)[*i] && !ft_istoken((*line)[*i]) && (*line)[*i] != ' ')
 	{
+		is_valid = 1;
 		if ((*line)[*i] == '\'')
 			*i = ft_parse_single_quotes(line, *i);
 		else if ((*line)[*i] == '\"')
@@ -16,6 +19,8 @@ char *ft_get_name(char **line, int *i, t_data *data, int flag)
 			*i = ft_parse_variables(line, *i, data->env, data->status_var);
 		(*i)++;
 	}
+	if (!is_valid)
+		return (0);
 	return (ft_substr(*line, start, *i - start));
 }
 

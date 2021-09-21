@@ -10,14 +10,10 @@ int ft_input_redir(t_list *head, int i, t_data *data)
 	i++;
 	name = ft_get_name(&(head->line), &i, data, WITH_VARIABLES);
 	if (!name || !*name)
-	{
-		//TODO error management: nome file invalido
-	}
+		return (ft_error(-10, "redirection failed: file name is invalid"));
 	file = open(name, O_RDONLY);
 	if (file == -1)
-	{
-		//TODO error: file openining
-	}
+		return (ft_error(-10, "redirection failed: could not open the file"));
 	if (head->fd_in != -1)
 		close(head->fd_in);
 	head->fd_in = file;
@@ -34,14 +30,10 @@ int ft_output_redir(t_list *head, int i, t_data *data)
 	i++;
 	name = ft_get_name(&(head->line), &i, data, WITH_VARIABLES);
 	if (!name || !*name)
-	{
-		//TODO error management: nome file invalido
-	}
+		return (ft_error(-10, "redirection failed: file name is invalid"));
 	file = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (file == -1)
-	{
-		//TODO error: file openining
-	}
+		return (ft_error(-10, "redirection failed: could not open the file"));
 	if (head->fd_out != -1)
 		close(head->fd_out);
 	head->fd_out = file;
@@ -58,14 +50,10 @@ int ft_double_output_redir(t_list *head, int i, t_data *data)
 	i += 2;
 	name = ft_get_name(&(head->line), &i, data, WITH_VARIABLES);
 	if (!name || !*name)
-	{
-		//TODO error management: nome file invalido
-	}
+		return (ft_error(-10, "redirection failed: file name is invalid"));
 	file = open(name, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (file == -1)
-	{
-		//TODO error: file can't be opened
-	}
+		return (ft_error(-10, "redirection failed: could not open the file"));
 	if (head->fd_out != -1)
 		close(head->fd_out);
 	head->fd_out = file;
@@ -78,13 +66,13 @@ int ft_double_input_redir(t_list *head, int i)
 	int j;
 	int fd[2];
 
-	if (pipe(fd))
-	{
-		//TODO error: pipe failed
-	}
 	j = i;
 	i += 2;
 	end_word = ft_get_name(&(head->line), &i, 0, NO_VARIABLES);
+	if (!end_word)
+		return (-10);
+	if (pipe(fd))
+		return (ft_error(-10, "redirection failed: pipe creation failed"));
 	ft_readline(end_word, fd);
 	free(end_word);
 	close(fd[1]);
@@ -100,10 +88,11 @@ int ft_parse_ioredir(t_data *data)
 	int i;
 
 	head = data->list;
-	while (head)
+	i = 0;
+	while (head && i >= 0)
 	{
 		i = 0;
-		while ((head->line)[i])
+		while ((head->line)[i] && i >= 0)
 		{
 			i = ft_skip_quotes(head->line, i);
 			if ((head->line)[i] == '>' && (head->line)[i + 1] == '>')
@@ -118,5 +107,7 @@ int ft_parse_ioredir(t_data *data)
 		}
 		head = head->next;
 	}
+	if (i < 0)
+		return (258);
 	return (0);
 }

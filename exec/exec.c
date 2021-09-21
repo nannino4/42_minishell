@@ -45,6 +45,7 @@ int ft_exec(t_data *data)
     t_list *list;
     int ret;
 
+    ret = 1;
     list = data->list;
     while (data->list && !data->exit_flag && ret != 130 && ret != 131)
     {
@@ -63,6 +64,5 @@ int ft_exec(t_data *data)
         ft_close_fd(data->list);
         data->list = data->list->next;
     }
-    ft_free_list(list);
     return (ret);
 }

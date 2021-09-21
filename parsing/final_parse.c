@@ -11,7 +11,7 @@ int ft_parse_quotes_and_variables(t_list *list_elem, int i, t_data *data)
     return (i);
 }
 
-void ft_create_strings(t_list *list_elem, t_data *data)
+int ft_create_strings(t_list *list_elem, t_data *data)
 {
     int i;
     int j;
@@ -32,14 +32,13 @@ void ft_create_strings(t_list *list_elem, t_data *data)
             }
             *split = ft_substr(list_elem->line, j, i - j);
             if (!(*split))
-            {
-                //TODO error: split allocation failed
-            }
+                return (ft_error(-1, "parse failed: allocation failed"));
             split++;
             i--;
         }
     }
     *split = 0;
+    return (0);
 }
 
 int ft_count_strings(char *line)
@@ -66,7 +65,7 @@ int ft_count_strings(char *line)
     return (strings);
 }
 
-void ft_split_command_argv(t_list *list_elem, t_data *data)
+int ft_split_command_argv(t_list *list_elem, t_data *data)
 {
     int strings;
 
@@ -74,15 +73,13 @@ void ft_split_command_argv(t_list *list_elem, t_data *data)
     if (strings == 0)
     {
         list_elem->split = 0;
-        return;
+        return (0);
     }
     list_elem->split = malloc((strings + 1) * sizeof(char *));
     if (!list_elem->split)
-    {
-        //TODO error: malloc failed
-    }
+        return (ft_error(-1, "parse failed: allocation failed"));
     (list_elem->split)[strings] = 0;
-    ft_create_strings(list_elem, data);
+    return (ft_create_strings(list_elem, data));
 }
 
 int ft_final_parse(t_data *data)
@@ -92,7 +89,8 @@ int ft_final_parse(t_data *data)
     head = data->list;
     while (head)
     {
-        ft_split_command_argv(head, data);
+        if (ft_split_command_argv(head, data))
+            return (-1);
         head = head->next;
     }
     return (0);

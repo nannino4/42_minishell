@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void ft_cut_pipe(t_data *data, char **line, int i)
+int ft_cut_pipe(t_data *data, char **line, int i)
 {
 	t_list *elem;
 	int fd[2];
@@ -15,7 +15,8 @@ void ft_cut_pipe(t_data *data, char **line, int i)
 	ft_add_elem(data, elem);
 	if (elem->previous)
 	{
-		pipe(fd);									//TODO devi fare errore e free
+		if (pipe(fd))
+			return (ft_error(-1, "piping failed: pipe creation failed"));
 		elem->fd_in = fd[0];
 		elem->previous->fd_out = fd[1];
 	}
@@ -23,6 +24,7 @@ void ft_cut_pipe(t_data *data, char **line, int i)
 		(*line)++;
 	if (**line == '|')
 		(*line)++;
+	return (0);
 }
 
 int ft_parse_pipes(t_data *data)
@@ -42,15 +44,15 @@ int ft_parse_pipes(t_data *data)
 		else if (line[i] == '|')
 		{
 			if (!word_flag)
-				return (ft_error(258, "unexpected '|'"));		//TODO devi fare free
+				return (ft_error(258, "unexpected '|'"));
 			word_flag = 0;
-			ft_cut_pipe(data, &line, i);
+			if (ft_cut_pipe(data, &line, i))
+				return (-1);
 			i = -1;
 		}
 		i++;
 	}
 	if (!word_flag)
-		ft_error(258, "line ending with unexpected '|'");		//TODO devi fare free
-	ft_cut_pipe(data, &line, i);
-	return (0);
+		return (ft_error(258, "line ending with unexpected '|'"));
+	return (ft_cut_pipe(data, &line, i));
 }

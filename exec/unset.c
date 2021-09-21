@@ -62,7 +62,10 @@ int ft_unset(t_data *data)
                 ft_remove_var(data->list->split[i], data);
         }
         else
+        {
+            printf("unset: `%s': not a valid identifier\n", data->list->split[i]);
             ret = 1;
+        }
         i++;
     }
     return (ret);
