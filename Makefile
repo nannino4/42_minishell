@@ -34,7 +34,7 @@ CFLAGS		= -Wall -Wextra -Werror
 
 all:		$(NAME)
 
-$(NAME):	$(OBJS) $(HOMEBREW)
+$(NAME):	$(HOMEBREW) $(OBJS)
 			make -C libft
 			mv libft/libft.a .
 			gcc $(OBJS) libft.a -o $(NAME) -lreadline -L ./homebrew/opt/readline/lib

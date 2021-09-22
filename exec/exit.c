@@ -17,7 +17,7 @@ int	ft_exit(t_data *data)
 		{
 			if (!ft_isdigit(data->list->split[1][i]))
 			{
-				printf("exit: %s: numeric argument required\n", \
+				printf("exit: %s: positive numeric argument required\n", \
 						data->list->split[1]);
 				return (255);
 			}

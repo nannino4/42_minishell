@@ -86,7 +86,7 @@ int		ft_parse_single_quotes(char **line, int i);
 int		ft_parse_double_quotes(char **line, int i, t_data *data, int flag);
 int		ft_parse_variables(char **line, int i, char **env, char *status_var);
 
-int		ft_get_io_redir(int i);
+int		ft_get_io_return(int i);
 int		ft_cut_line_io_redir(char **line, int i, int j);
 
 /* free */

@@ -1,24 +1,11 @@
 #include "minishell.h"
 
-void	sigquit_handler(void)
+void	sigint_handler(int sig)
 {
 	pid_t	pid;
 	int		status;
 
-	pid = waitpid(-1, &status, WNOHANG);
-	if (pid == -1)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-		ft_putstr_fd("  \b\b", 1);
-	}
-}
-
-void	sigint_handler(void)
-{
-	pid_t	pid;
-	int		status;
-
+	sig = 0;
 	pid = waitpid(-1, &status, WNOHANG);
 	if (pid == -1)
 	{
@@ -59,6 +46,16 @@ void	ft_init(t_data *data, char **envp)
 	data->exit_flag = 0;
 }
 
+void	ft_main_utility(t_data *data)
+{
+	char	*tmp;
+
+	add_history(data->line);
+	tmp = ft_itoa(ft_parse_and_execute(data));
+	free(data->status_var);
+	data->status_var = tmp;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
@@ -74,11 +71,7 @@ int	main(int argc, char **argv, char **envp)
 		printf(BHBLU"––––––––––––\n"RESET);
 		data.line = readline("# ORDERS, MY LORD >: ");
 		if (data.line && *(data.line))
-		{
-			add_history(data.line);
-			free(data.status_var);
-			data.status_var = ft_itoa(ft_parse_and_execute(&data));
-		}
+			ft_main_utility(&data);
 	}
 	printf("exit\n");
 	status = ft_atoi(data.status_var);

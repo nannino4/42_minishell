@@ -53,12 +53,12 @@ void	ft_set_io(t_list *list)
 {
 	if (list->fd_in != -1)
 	{
-		dup2(list->fd_in, STDIN_FILENO) == -1;
+		dup2(list->fd_in, STDIN_FILENO);
 		close(list->fd_in);
 	}
 	if (list->fd_out != -1)
 	{
-		dup2(list->fd_out, STDOUT_FILENO) == -1;
+		dup2(list->fd_out, STDOUT_FILENO);
 		close(list->fd_out);
 	}
 }

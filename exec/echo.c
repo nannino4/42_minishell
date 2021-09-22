@@ -9,7 +9,7 @@ void	ft_echo(t_data *data)
 	argv = data->list->split;
 	rmv_n = 0;
 	i = 1;
-	if (!ft_strncmp(argv[1], "-n", ft_strlen(argv[1])) \
+	if (argv[1] && !ft_strncmp(argv[1], "-n", ft_strlen(argv[1])) \
 			&& ft_strlen(argv[1]) == ft_strlen("-n"))
 	{
 		rmv_n = 1;
